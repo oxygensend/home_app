@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+    nginx:
+        depends_on:
+            - api
+            - client
+        restart: always
+        build:
+            dockerfile: docker/Dockerfile
+            context: ./nginx
+        ports:
+            - "3050:80"
+        networks:
+            - app
+    api:
+        build:
+            context: ./api
+            dockerfile:  docker/Dockerfile.dev
+        env_file: .env.local
+        environment:
+            - PORT=${PORT}
+            - MONGO_URL=${MONGO_URL}
+        ports:
+            - "3001:3000"
+        networks:
+            - app
+        volumes:
+            - ./api:/app
+        external_links:
+            - mongo
+        depends_on:
+            - mongo
+    client:
+        stdin_open: true
+        build:
+            dockerfile: docker/Dockerfile.dev
+            context: ./client
+        networks:
+            - app
+        volumes:
+            - /app/node_modules
+            - ./client:/app
+
+    mongo:
+        image: mongo:4.4.6
+        ports:
+            - "27017:27017"
+        networks:
+            - app
+        volumes:
+            - ./data:/data/db
+
+networks:
+    app:
