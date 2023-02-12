@@ -42,6 +42,8 @@ export class Routes {
                 );
             });
         });
+
+        console.log(this.router);
     }
 
 }

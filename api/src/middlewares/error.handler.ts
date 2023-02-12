@@ -9,6 +9,7 @@ interface IError {
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
 
+    console.log(err.message, 'aaaa');
     if (err instanceof HttpException) {
         const message: string | object = err instanceof BadRequestException ?
             {violations: JSON.parse(err.message)} : err.message;

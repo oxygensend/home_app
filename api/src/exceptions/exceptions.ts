@@ -1,4 +1,5 @@
-import {HTTP_CODES} from "../constants/http.codes";
+import {HTTP_CODES} from "../config/http.codes";
+import {ValidationError} from "class-validator";
 
 export abstract class HttpException extends Error {
     public constructor(message?: String | object) {
@@ -6,6 +7,13 @@ export abstract class HttpException extends Error {
     }
 
     public abstract statusCode(): HTTP_CODES
+}
+
+export namespace App {
+    import Unauthorized = HttpExceptions.Unauthorized;
+
+    export class NoCryptoKeyException extends Error {}
+    export class InvalidTokenException extends Error {}
 }
 
 export namespace HttpExceptions {
@@ -34,6 +42,7 @@ export namespace HttpExceptions {
     }
 
     export class BadRequest extends HttpException {
+
         public statusCode(): HTTP_CODES {
             return HTTP_CODES.BAD_REQUEST;
         }

@@ -68,6 +68,7 @@ export class Server {
     private routesSetUp(): void {
         this.app.use(this.routes.getRouter());
         this.routes.registerRoutes();
+
     }
 
     public getApp(): Application {
