@@ -20,7 +20,7 @@ export class TokenStorage {
         return jwt.sign({
                 ...payload,
                 iat: now.toUnixInteger(),
-                exp: now.plus({millisecond: config.defaultTokenTTL}).toUnixInteger()
+                exp: now.plus({seconds: config.defaultTokenTTL}).toUnixInteger()
             },
             this.cryptoKeys.private,
             {algorithm: "RS256"});

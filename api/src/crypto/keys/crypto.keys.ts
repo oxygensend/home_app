@@ -4,7 +4,7 @@ import {App} from "../../exceptions/exceptions";
 import {Service} from "typedi";
 
 /**
- * Class responsible for reading keys for crypto
+ * Class responsible for reading crypto keys from files
  */
 @Service()
 export class CryptoKeys {

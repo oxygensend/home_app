@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import {Server} from "../../src/lib/server";
-import {IUser, User} from "../../src/models/user.model";
+import {UserInterface, User} from "../../src/models/user.model";
 import * as bcrypt from "bcrypt";
 
 
@@ -25,7 +25,7 @@ describe('user module', () => {
         let email = 'test@test.com';
         let username = 'test123';
         let password = 'test123';
-        let user: IUser;
+        let user: UserInterface;
         const exec = ({_username = username, _password = password}: LoginParameters) => {
             return request
                 .post('/api/auth')
@@ -67,7 +67,6 @@ describe('user module', () => {
 
         it('return should contain auth token', async () => {
             const res = await exec({});
-            console.log(res.error);
 
             expect(res).toHaveProperty('Authentication');
         });

@@ -1,23 +1,25 @@
 import {Service} from "typedi";
 import winston from "winston";
-import {TokenStorage} from "../crypto/storage/token.storage";
-import {Logger} from "../lib/logger";
-import {AuthPayloadInterface, AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto/crypto.types";
-import {User} from "../models/user.model";
-import {App} from "../exceptions/exceptions";
-import {Session} from "../models/session.model";
-import {SessionService} from "./session.service";
+import {SessionManager} from "./session.manager";
+import {TokenStorage} from "../storage/token.storage";
+import {Logger} from "../../lib/logger";
+import {AuthPayloadInterface, AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto.types";
+import {App} from "../../exceptions/exceptions";
+import { User} from "../../models/user.model";
 
+/**
+ * CLass responsible for user authentication
+ */
 @Service()
-export class AuthenticationService {
+export class Authenticator {
     private readonly logger: winston.Logger;
 
-    constructor(private readonly tokenStorage: TokenStorage, private readonly sessionService: SessionService) {
+    constructor(private readonly tokenStorage: TokenStorage, private readonly sessionService: SessionManager) {
         this.logger = Logger.getLogger();
     }
 
 
-    async authentication(userId: string): Promise<AuthResponseInterface> {
+    public async authentication(userId: string): Promise<AuthResponseInterface> {
 
         const user = await User.findById(userId);
 
@@ -46,4 +48,7 @@ export class AuthenticationService {
     }
 
 
+    public getLoggedUser(token: string): AuthPayloadInterface {
+        return this.tokenStorage.validateToken <AuthPayloadInterface>(token, TokenType.auth);
+    }
 }

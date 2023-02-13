@@ -7,19 +7,22 @@ import * as bcrypt from "bcrypt";
 import {TokenStorage} from "../crypto/storage/token.storage";
 import {AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto/crypto.types";
 import {Service} from "typedi";
-import {AuthenticationService} from "./authentication.service";
 import {RefreshTokenDto} from "../dto/refresh.token.dto";
+import {Authenticator} from "../crypto/auth/authenticator";
+import {SessionManager} from "../crypto/auth/session.manager";
 import {DateTime} from "luxon";
-import {SessionService} from "./session.service";
 
+/**
+ * Class responsible for user data manipulation
+ */
 @Service()
 export class UserService {
 
     private readonly logger: winston.Logger;
 
-    constructor(private readonly authenticationService: AuthenticationService,
+    constructor(private readonly authenticator: Authenticator,
                 private readonly tokenStorage: TokenStorage,
-                private readonly sessionService: SessionService) {
+                private readonly sessionManager: SessionManager) {
         this.logger = Logger.getLogger();
     }
 
@@ -35,7 +38,7 @@ export class UserService {
             throw new HttpExceptions.BadRequest("Invalid credentials");
         }
 
-        return this.authenticationService.authentication(user._id);
+        return this.authenticator.authentication(user._id);
     }
 
     public async refreshToken(refreshTokenDto: RefreshTokenDto): Promise<AuthResponseInterface> {
@@ -43,12 +46,13 @@ export class UserService {
         const {sessionId} = await this.tokenStorage
             .validateToken<RefreshPayloadInterface>(refreshTokenDto.token, TokenType.refresh);
 
-        const session = await this.sessionService.getSession(sessionId);
+        const session = await this.sessionManager.getSession(sessionId);
 
-        if (!session ) {
-            throw new HttpExceptions.Unauthorized("Expired session");
+        if (!session || DateTime.fromJSDate(session.expiredAt) > DateTime.now() ) {
+            throw new HttpExceptions.Unauthorized("Session expired");
         }
 
-        return this.authenticationService.authentication(sessionId);
+        return this.authenticator.authentication(sessionId);
     }
+
 }

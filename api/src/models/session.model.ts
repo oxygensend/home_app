@@ -1,5 +1,5 @@
-import {DateTime} from "luxon";
 import {model, Schema} from "mongoose";
+import {DateTime} from "luxon";
 import {config} from "../config/config";
 
 export interface SessionInterface {
@@ -7,11 +7,11 @@ export interface SessionInterface {
     expiredAt: Date
 }
 
-const refreshTokenSchema = new Schema<SessionInterface>({
+const sessionSchema = new Schema<SessionInterface>({
     expiredAt: {
         type: Date,
-        default: Date.now()
+        default: DateTime.now().plus({seconds: config.sessionTTL}).toJSDate()
     }
 })
 
-export const Session = model<SessionInterface>('RefreshToken', refreshTokenSchema);
+export const Session = model<SessionInterface>('Session', sessionSchema);

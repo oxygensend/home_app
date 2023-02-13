@@ -9,7 +9,6 @@ server.run();
 const logger = Logger.getLogger();
 process.on('unhandledRejection', (reason: Error | any) => {
     logger.error(`Unhandled rejection: ${reason.message || reason}`);
-    console.log(reason.message, 'xd');
     throw new Error(reason.message || reason);
 })
 
