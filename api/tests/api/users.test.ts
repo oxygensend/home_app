@@ -2,6 +2,8 @@ import supertest from "supertest";
 import {Server} from "../../src/lib/server";
 import {UserInterface, User} from "../../src/models/user.model";
 import * as bcrypt from "bcrypt";
+import {HTTP_CODES} from "../../src/config/http.codes";
+import {describe} from "node:test";
 
 
 interface LoginParameters {
@@ -35,12 +37,13 @@ describe('user module', () => {
         beforeAll(async () => {
 
             const salt = await bcrypt.genSalt(666);
+            const hash = await bcrypt.hash(password, salt);
             user = await User.create({
                 email: email,
                 username: username,
                 name: 'test',
                 surname: 'test',
-                password: bcrypt.hash(password, salt)
+                password: hash
             })
         })
 
@@ -65,11 +68,55 @@ describe('user module', () => {
             expect(res.status).toBe(400);
         });
 
-        it('return should contain auth token', async () => {
+        it('return should contain auth token and refresh token', async () => {
             const res = await exec({});
 
-            expect(res).toHaveProperty('Authentication');
+            expect(res).toHaveProperty('accessToken');
+            expect(res).toHaveProperty('refreshToken');
         });
 
+    });
+
+    describe("POST /refresh_token", () => {
+        let email = 'test@test.com';
+        let username = 'test123';
+        let password = 'test123';
+        let user: UserInterface;
+
+        beforeAll(async () => {
+
+            const salt = await bcrypt.genSalt(666);
+            const hash = await bcrypt.hash(password, salt);
+            user = await User.create({
+                email: email,
+                username: username,
+                name: 'test',
+                surname: 'test',
+                password: hash
+            })
+        })
+
+        it('should return 401 if passed token is invalid', async () => {
+
+            const res = await request.post('/api/refresh_token').send({token: '12311234123124123'});
+
+            expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
+        });
+
+        it('should return 401 if passed token is expired', async () => {
+
+            // mock token create service
+            const res = await request.post('/api/refresh_token').send({token: '12311234123124123'});
+
+            expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
+        });
+
+        it('should return new access and refresh token', async () => {
+
+            // mock token create service
+            const res = await request.post('/api/refresh_token').send({token: '12311234123124123'});
+
+            expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
+        });
     });
 });

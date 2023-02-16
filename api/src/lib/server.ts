@@ -4,14 +4,15 @@ import {Routes} from "./routes";
 import {Logger} from "./logger";
 import winston from "winston";
 import "express-async-errors";
-import {errorHandler} from "../middlewares/error.handler";
 import * as os from "os";
 import {parse} from "express-form-data";
 import cors from "cors";
+import {Container} from "typedi";
+import {ErrorMiddleware} from "../middlewares/error.middleware";
 
 export class Server {
 
-    private app: Application;
+    private readonly app: Application;
     private readonly port: string | number;
     private static instance: Server;
     private routes: Routes;
@@ -53,9 +54,11 @@ export class Server {
             autoClean: true,
         }));
         this.routesSetUp();
-        this.app.use(errorHandler);
-        this.databaseSetUp();
 
+        const errorHandler = Container.get(ErrorMiddleware);
+        this.app.use(errorHandler.call.bind(errorHandler));
+
+        this.databaseSetUp();
         this.app.use(cors());
 
     }

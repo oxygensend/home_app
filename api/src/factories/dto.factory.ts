@@ -1,6 +1,6 @@
-import {DtoInterface} from "./dto.interface";
 import {validate} from "class-validator";
 import { HttpExceptions} from "../exceptions/exceptions";
+import {DtoInterface} from "../dto/dto.interface";
 
 /**
  * Abstract Factory creating and validating dto instances

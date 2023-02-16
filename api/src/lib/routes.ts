@@ -3,6 +3,7 @@ import {Method, IRoute} from "../decorators/route.types";
 import {controllers} from "../controllers";
 import {Container} from "typedi";
 import 'reflect-metadata';
+import {MiddlewareFactory} from "../factories/middleware.factory";
 
 export class Routes {
 
@@ -21,7 +22,10 @@ export class Routes {
     }
 
     public setRoute(method: Method, path: string, middlewares: any[], binding: any) {
-        this.router[method](path, ...middlewares, binding);
+        this.router[method](
+            path,
+            ...middlewares.map(middleware => MiddlewareFactory.bind(middleware)),
+            binding);
     }
 
     public getRouter(): Router {

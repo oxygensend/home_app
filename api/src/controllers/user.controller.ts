@@ -4,10 +4,12 @@ import {Service} from "typedi";
 import {Logger} from "../lib/logger";
 import winston from "winston";
 import {LoginDto} from "../dto/login.dto";
-import {DtoFactory} from "../dto/dto.factory";
 import {UserService} from "../services/user.service";
 import {RefreshTokenDto} from "../dto/refresh.token.dto";
 import {Response} from "express";
+import {ObjectIDMiddleware} from "../middlewares/objectID.middleware";
+import {AuthMiddleware} from "../middlewares/auth.middleware";
+import {DtoFactory} from "../factories/dto.factory";
 
 @Service()
 @Controller()
@@ -35,6 +37,12 @@ export class UserController {
         return res
             .json(response)
             .status(200);
+    }
+
+    @Get('/users/:id', [AuthMiddleware, ObjectIDMiddleware])
+    public async getUser(req: Request, res: Response) {
+
+        console.log(req);
     }
 
 
