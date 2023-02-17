@@ -46,27 +46,31 @@ export class Routes {
         fs.readdirSync(config.controllersDirectory)
             .filter((file) => file.endsWith('.controller.ts'))
             .forEach((file) => {
-                const controllerModule = require(path.join(
+                const controllerClass = require(path.join(
                     controllersDirectory,
                     file
-                ));
-                const instance: any = Container.get(controllerModule.default);
-                const routes: IRoute[] = Reflect.getMetadata(
-                    'routes',
-                    controllerModule.default
-                );
-                const prefix: string = Reflect.getMetadata(
-                    'prefix',
-                    controllerModule.default
-                );
-                routes.forEach((route: IRoute) => {
-                    this.setRoute(
-                        route.method,
-                        `${prefix}${route.path}`,
-                        route.middlewares,
-                        instance[route.methodName].bind(instance)
+                )).default;
+                if (
+                    Reflect.hasMetadata('Controller', controllerClass.prototype)
+                ) {
+                    const instance: any = Container.get(controllerClass);
+                    const routes: IRoute[] = Reflect.getMetadata(
+                        'routes',
+                        controllerClass
                     );
-                });
+                    const prefix: string = Reflect.getMetadata(
+                        'prefix',
+                        controllerClass
+                    );
+                    routes.forEach((route: IRoute) => {
+                        this.setRoute(
+                            route.method,
+                            `${prefix}${route.path}`,
+                            route.middlewares,
+                            instance[route.methodName].bind(instance)
+                        );
+                    });
+                }
             });
     }
 }
