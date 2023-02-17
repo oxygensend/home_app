@@ -1,12 +1,14 @@
-import {Router} from "express";
-import {Method, IRoute} from "../decorators/route.types";
-import {controllers} from "../controllers";
-import {Container} from "typedi";
+import { Router } from 'express';
+import { Method, IRoute } from '../decorators/route.types';
+import { Container } from 'typedi';
 import 'reflect-metadata';
-import {MiddlewareFactory} from "../factories/middleware.factory";
+import { MiddlewareFactory } from '../factories/middleware.factory';
+import * as fs from 'fs';
+import { config } from '../config/config';
+import * as path from 'path';
+import controllersDirectory = config.controllersDirectory;
 
 export class Routes {
-
     private readonly router: Router;
     private static instance: Routes;
 
@@ -21,11 +23,19 @@ export class Routes {
         return Routes.instance;
     }
 
-    public setRoute(method: Method, path: string, middlewares: any[], binding: any) {
+    public setRoute(
+        method: Method,
+        path: string,
+        middlewares: any[],
+        binding: any
+    ) {
         this.router[method](
             path,
-            ...middlewares.map(middleware => MiddlewareFactory.bind(middleware)),
-            binding);
+            ...middlewares.map((middleware) =>
+                MiddlewareFactory.bind(middleware)
+            ),
+            binding
+        );
     }
 
     public getRouter(): Router {
@@ -33,20 +43,30 @@ export class Routes {
     }
 
     public registerRoutes(): void {
-        controllers.forEach((controllerClass) => {
-            const instance: any = Container.get(controllerClass);
-            const routes: IRoute[] = Reflect.getMetadata('routes', controllerClass);
-            const prefix: string = Reflect.getMetadata('prefix', controllerClass);
-            routes.forEach((route: IRoute) => {
-                this.setRoute(
-                    route.method,
-                    `${prefix}${route.path}`,
-                    route.middlewares,
-                    instance[route.methodName].bind(instance)
+        fs.readdirSync(config.controllersDirectory)
+            .filter((file) => file.endsWith('.controller.ts'))
+            .forEach((file) => {
+                const controllerModule = require(path.join(
+                    controllersDirectory,
+                    file
+                ));
+                const instance: any = Container.get(controllerModule.default);
+                const routes: IRoute[] = Reflect.getMetadata(
+                    'routes',
+                    controllerModule.default
                 );
+                const prefix: string = Reflect.getMetadata(
+                    'prefix',
+                    controllerModule.default
+                );
+                routes.forEach((route: IRoute) => {
+                    this.setRoute(
+                        route.method,
+                        `${prefix}${route.path}`,
+                        route.middlewares,
+                        instance[route.methodName].bind(instance)
+                    );
+                });
             });
-        });
-
     }
-
 }

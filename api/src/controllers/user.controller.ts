@@ -1,20 +1,19 @@
-import {Get, Post} from "../decorators/route.decorator";
-import {Controller} from "../decorators/controller.decorator";
-import {Service} from "typedi";
-import {Logger} from "../lib/logger";
-import winston from "winston";
-import {LoginDto} from "../dto/login.dto";
-import {UserService} from "../services/user.service";
-import {RefreshTokenDto} from "../dto/refresh.token.dto";
-import {Response} from "express";
-import {ObjectIDMiddleware} from "../middlewares/objectID.middleware";
-import {AuthMiddleware} from "../middlewares/auth.middleware";
-import {DtoFactory} from "../factories/dto.factory";
+import { Get, Post } from '../decorators/route.decorator';
+import { Controller } from '../decorators/controller.decorator';
+import { Service } from 'typedi';
+import { Logger } from '../lib/logger';
+import winston from 'winston';
+import { LoginDto } from '../dto/login.dto';
+import { UserService } from '../services/user.service';
+import { RefreshTokenDto } from '../dto/refresh.token.dto';
+import { Response } from 'express';
+import { ObjectIDMiddleware } from '../middlewares/objectID.middleware';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
+import { DtoFactory } from '../factories/dto.factory';
 
 @Service()
 @Controller()
-export class UserController {
-
+export default class UserController {
     private readonly logger: winston.Logger;
 
     constructor(private readonly userService: UserService) {
@@ -23,27 +22,26 @@ export class UserController {
 
     @Post('/auth')
     public async auth(req: Request, res: Response) {
-        const dto = await DtoFactory.create(LoginDto, req.body as Partial<LoginDto>);
+        const dto = await DtoFactory.create(
+            LoginDto,
+            req.body as Partial<LoginDto>
+        );
         const response = await this.userService.login(dto);
-        return res
-            .json(response)
-            .status(200);
+        return res.json(response).status(200);
     }
 
     @Post('/refresh_token')
     public async refreshToken(req: Request, res: Response) {
-        const dto = await DtoFactory.create(RefreshTokenDto, req.body as Partial<RefreshTokenDto>);
+        const dto = await DtoFactory.create(
+            RefreshTokenDto,
+            req.body as Partial<RefreshTokenDto>
+        );
         const response = await this.userService.refreshToken(dto);
-        return res
-            .json(response)
-            .status(200);
+        return res.json(response).status(200);
     }
 
     @Get('/users/:id', [AuthMiddleware, ObjectIDMiddleware])
     public async getUser(req: Request, res: Response) {
-
         console.log(req);
     }
-
-
 }

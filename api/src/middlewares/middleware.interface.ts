@@ -1,5 +1,9 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from 'express';
 
-export interface MiddlewareInterface {
-    call(req: Request, res: Response, next: NextFunction): void
+type ExpressMiddleware<T> = T extends Error
+    ? (err: Error, req: Request, res: Response, next: NextFunction) => any
+    : (req: Request, res: Response, next: NextFunction) => any;
+
+export interface MiddlewareInterface<T = void> {
+    call: ExpressMiddleware<T>;
 }
