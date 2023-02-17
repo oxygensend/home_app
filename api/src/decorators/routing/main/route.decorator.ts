@@ -1,4 +1,4 @@
-import {Method, IRoute} from "./route.types";
+import {Method, IRoute} from "../route.types";
 import 'reflect-metadata';
 
 /**

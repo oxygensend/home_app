@@ -4,7 +4,7 @@ import {SessionManager} from "./session.manager";
 import {TokenStorage} from "../storage/token.storage";
 import {Logger} from "../../lib/logger";
 import {AuthPayloadInterface, AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto.types";
-import {App} from "../../exceptions/exceptions";
+import {App, HttpExceptions} from "../../exceptions/exceptions";
 import { User} from "../../models/user.model";
 
 /**
@@ -49,6 +49,10 @@ export class Authenticator {
 
 
     public getLoggedUser(token: string): AuthPayloadInterface {
-        return this.tokenStorage.validateToken <AuthPayloadInterface>(token, TokenType.auth);
+        try {
+            return this.tokenStorage.validateToken <AuthPayloadInterface>(token, TokenType.auth);
+        } catch (err: any) {
+            throw new HttpExceptions.Unauthorized(err.message)
+        }
     }
 }

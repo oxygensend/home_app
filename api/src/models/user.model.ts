@@ -13,6 +13,12 @@ export interface UserInterface {
 
 }
 
+export interface RelatedUserInterface {
+    _id?: string,
+    username: string,
+    email: string
+}
+
 const userSchema = new Schema<UserInterface>({
     name: {
         type: String,

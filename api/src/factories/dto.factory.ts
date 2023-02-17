@@ -1,6 +1,7 @@
 import {validate} from "class-validator";
 import { HttpExceptions} from "../exceptions/exceptions";
 import {DtoInterface} from "../dto/dto.interface";
+import {plainToInstance} from "class-transformer";
 
 /**
  * Abstract Factory creating and validating dto instances
@@ -8,8 +9,8 @@ import {DtoInterface} from "../dto/dto.interface";
 export abstract class DtoFactory {
     static async create<T extends DtoInterface>(Class: new () => T, partial: Partial<T>): Promise<T> {
 
-        const dto = Object.assign(new Class(), partial);
-        const errors = await validate(dto, {whitelist: true});
+        const dto = plainToInstance(Class, partial);
+        const errors = await validate(dto, {whitelist: true });
 
         if (errors.length > 0) {
             throw  new HttpExceptions.UnprocessableEntity(errors);

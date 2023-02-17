@@ -1,5 +1,3 @@
-import { Get, Post } from '../decorators/route.decorator';
-import { Controller } from '../decorators/controller.decorator';
 import { Service } from 'typedi';
 import { Logger } from '../lib/logger';
 import winston from 'winston';
@@ -10,6 +8,7 @@ import { Response } from 'express';
 import { ObjectIDMiddleware } from '../middlewares/objectID.middleware';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { DtoFactory } from '../factories/dto.factory';
+import {Controller, Get, Post} from "../decorators/routing";
 
 @Service()
 @Controller()
@@ -22,7 +21,7 @@ export default class UserController {
 
     @Post('/auth')
     public async auth(req: Request, res: Response) {
-        const dto = await DtoFactory.create(
+        const dto = await DtoFactory.create<LoginDto>(
             LoginDto,
             req.body as Partial<LoginDto>
         );
@@ -32,7 +31,7 @@ export default class UserController {
 
     @Post('/refresh_token')
     public async refreshToken(req: Request, res: Response) {
-        const dto = await DtoFactory.create(
+        const dto = await DtoFactory.create<RefreshTokenDto>(
             RefreshTokenDto,
             req.body as Partial<RefreshTokenDto>
         );
