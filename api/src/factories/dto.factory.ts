@@ -12,7 +12,7 @@ export abstract class DtoFactory {
         const errors = await validate(dto, {whitelist: true});
 
         if (errors.length > 0) {
-            throw  new HttpExceptions.BadRequest(errors);
+            throw  new HttpExceptions.UnprocessableEntity(errors);
         }
 
         return dto;

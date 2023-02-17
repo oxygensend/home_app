@@ -1,15 +1,16 @@
-import {HTTP_CODES} from "../config/http.codes";
+import { HTTP_CODES } from '../config/http.codes';
 
 export abstract class HttpException extends Error {
     public constructor(message?: String | object) {
-        super(typeof (message) === 'string' ? message : JSON.stringify(message));
+        super(typeof message === 'string' ? message : JSON.stringify(message));
     }
 
-    public abstract statusCode(): HTTP_CODES
+    public abstract statusCode(): HTTP_CODES;
 }
 
 export namespace App {
     export class NoCryptoKeyException extends Error {}
+
     export class InvalidTokenException extends Error {}
 }
 
@@ -39,7 +40,12 @@ export namespace HttpExceptions {
     }
 
     export class BadRequest extends HttpException {
+        public statusCode(): HTTP_CODES {
+            return HTTP_CODES.BAD_REQUEST;
+        }
+    }
 
+    export class UnprocessableEntity extends HttpException {
         public statusCode(): HTTP_CODES {
             return HTTP_CODES.BAD_REQUEST;
         }

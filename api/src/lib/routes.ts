@@ -50,27 +50,24 @@ export class Routes {
                     controllersDirectory,
                     file
                 )).default;
-                if (
-                    Reflect.hasMetadata('Controller', controllerClass.prototype)
-                ) {
-                    const instance: any = Container.get(controllerClass);
-                    const routes: IRoute[] = Reflect.getMetadata(
-                        'routes',
-                        controllerClass
+
+                const instance: any = Container.get(controllerClass);
+                const routes: IRoute[] = Reflect.getMetadata(
+                    'routes',
+                    controllerClass
+                );
+                const prefix: string = Reflect.getMetadata(
+                    'prefix',
+                    controllerClass
+                );
+                routes.forEach((route: IRoute) => {
+                    this.setRoute(
+                        route.method,
+                        `${prefix}${route.path}`,
+                        route.middlewares,
+                        instance[route.methodName].bind(instance)
                     );
-                    const prefix: string = Reflect.getMetadata(
-                        'prefix',
-                        controllerClass
-                    );
-                    routes.forEach((route: IRoute) => {
-                        this.setRoute(
-                            route.method,
-                            `${prefix}${route.path}`,
-                            route.middlewares,
-                            instance[route.methodName].bind(instance)
-                        );
-                    });
-                }
+                });
             });
     }
 }

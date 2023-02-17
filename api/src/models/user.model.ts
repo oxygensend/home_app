@@ -1,7 +1,7 @@
 import {model, Schema} from "mongoose";
 
 export interface UserInterface {
-    _id?: string,
+    _id: string,
     name: string,
     surname: string,
     username: string,

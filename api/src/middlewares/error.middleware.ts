@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException, HttpExceptions } from '../exceptions/exceptions';
-import BadRequestException = HttpExceptions.BadRequest;
 import { Service } from 'typedi';
 import { MiddlewareInterface } from './middleware.interface';
 
@@ -14,7 +13,7 @@ export class ErrorMiddleware implements MiddlewareInterface<Error> {
     call(err: Error, req: Request, res: Response, next: NextFunction): void {
         if (err instanceof HttpException) {
             const message: string | object =
-                err instanceof BadRequestException
+                err instanceof HttpExceptions.UnprocessableEntity
                     ? { violations: JSON.parse(err.message) }
                     : err.message;
             res.status(err.statusCode()).json({ error: message });
