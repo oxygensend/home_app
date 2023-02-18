@@ -8,8 +8,8 @@ export interface ExpenseInterface {
     amount: number;
     name?: string;
     shop?: string;
-    executor: string;
-    participants: [];
+    executor: RelatedUserInterface;
+    participants: Array<RelatedUserInterface>;
     transactionDate: Date;
     createdAt: Date;
     updatedAt: Date;

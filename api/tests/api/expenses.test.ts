@@ -5,6 +5,7 @@ import { HTTP_CODES } from '../../src/config/http.codes';
 import fs from 'fs';
 import { config } from '../../src/config/config';
 import { User } from '../../src/models/user.model';
+import {Expense, ExpenseInterface} from '../../src/models/expense.model';
 
 describe('expense module', () => {
     let request: supertest.SuperTest<supertest.Test>;
@@ -128,6 +129,61 @@ describe('expense module', () => {
 
             expect(res.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
         });
+        it('should return 201 if request is valid', async () => {
+            const token = await loginRequest();
+            const res = await exec({}, token);
+
+            expect(res.statusCode).toBe(HTTP_CODES.CREATED);
+        });
+    });
+
+    describe('PATCH /expenses/:id', () => {
+        let expense: ExpenseInterface;
+        beforeAll(async () => {
+            expense = await Expense.create({
+                amount: 100,
+                name: 'test expense',
+                shop: 'test shop',
+                executor: {
+                    username: 'test',
+                    email: 'test@test.com',
+                },
+                participants: [
+                    {
+                        username: 'test',
+                        email: 'test@test.com',
+                    },
+                    {
+                        username: 'test2',
+                        email: 'test2@test.com',
+                    },
+                ],
+                transactionDate: DateTime.now().toISODate(),
+            });
+        });
+
+        afterAll(async () => {
+            await Expense.deleteMany({});
+        });
+
+        const exec = (params: any, token?: string) => {
+            const req = request.patch('/expenses/' + expense._id).send(params);
+            return token ? req.set({ Authorization: token }) : req;
+        };
+
+        it('should return 401 if user is not authenticated', async () => {
+            const res = await exec({});
+
+            expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
+        });
+
+        it('should return 401 if user is not owner', async () => {
+            const token = await loginRequest('test2', 'test123');
+            const res = await exec({}, token);
+
+            expect(res.statusCode).toBe(HTTP_CODES.FORBIDDEN);
+        });
+
         it('should return 200 if request is valid', async () => {
             const token = await loginRequest();
             const res = await exec({}, token);

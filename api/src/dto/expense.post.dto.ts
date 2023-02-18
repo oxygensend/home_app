@@ -10,7 +10,7 @@ import { ExistingUser, Required } from '../decorators/validation';
 import { Type } from 'class-transformer';
 import { RelatedUserDto } from './related.user.dto';
 
-export class ExpenseDto implements DtoInterface {
+export class ExpensePostDto implements DtoInterface {
     @IsString()
     @IsOptional()
     name: string;
