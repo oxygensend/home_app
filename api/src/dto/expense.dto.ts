@@ -3,7 +3,7 @@ import {
     IsArray,
     IsDateString,
     IsNumber,
-    IsObject,
+    IsObject, IsOptional, IsString,
     ValidateNested,
 } from 'class-validator';
 import { ExistingUser, Required } from '../decorators/validation';
@@ -11,12 +11,16 @@ import { Type } from 'class-transformer';
 import { RelatedUserDto } from './related.user.dto';
 
 export class ExpenseDto implements DtoInterface {
+    @IsString()
+    @IsOptional()
     name: string;
 
     @IsNumber()
     @Required()
     amount: number;
 
+    @IsString()
+    @IsOptional()
     shop: string;
 
     @IsObject()

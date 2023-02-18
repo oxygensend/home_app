@@ -6,6 +6,7 @@ import {Logger} from "../../lib/logger";
 import {AuthPayloadInterface, AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto.types";
 import {App, HttpExceptions} from "../../exceptions/exceptions";
 import { User} from "../../models/user.model";
+import {DateTime} from "luxon";
 
 /**
  * CLass responsible for user authentication
@@ -34,6 +35,7 @@ export class Authenticator {
 
         await this.sessionService.startSession(user._id);
 
+        this.logger.info(`Access token generated for user ${user.username} at time: ${DateTime.now()}`)
         //emit event for logging
         return {
             accessToken: this.tokenStorage.generateToken<AuthPayloadInterface>({

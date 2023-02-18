@@ -21,14 +21,12 @@ const userSchema = new mongoose.Schema<RelatedUserInterface>({
         minlength: 3,
         maxlength: 50,
         required: false,
-        unique: true,
     },
     email: {
         type: String,
         minlength: 3,
         maxlength: 50,
         required: false,
-        unique: true,
     },
 });
 

@@ -14,6 +14,7 @@ export const ExistingUser = (validationOptions?: ValidationOptions) => {
             options: validationOptions,
             validator: {
                 async validate(value: any, args: ValidationArguments) {
+                    if(!value) return false;
                     const user = await User.findOne({
                         username: value.username,
                     });
