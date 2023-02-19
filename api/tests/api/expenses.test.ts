@@ -5,7 +5,7 @@ import { HTTP_CODES } from '../../src/config/http.codes';
 import fs from 'fs';
 import { config } from '../../src/config/config';
 import { User } from '../../src/models/user.model';
-import {Expense, ExpenseInterface} from '../../src/models/expense.model';
+import { Expense, ExpenseInterface } from '../../src/models/expense.model';
 
 describe('expense module', () => {
     let request: supertest.SuperTest<supertest.Test>;
@@ -32,8 +32,8 @@ describe('expense module', () => {
         let rawJson: Buffer = fs.readFileSync(
             config.testDirectory + '/dummy/users.json'
         );
-        let videos: [] = JSON.parse(rawJson.toString());
-        await User.collection.insertMany(videos);
+        let expenses: [] = JSON.parse(rawJson.toString());
+        await User.collection.insertMany(expenses);
     });
 
     afterAll(async () => {
@@ -189,6 +189,125 @@ describe('expense module', () => {
             const res = await exec({}, token);
 
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
+        });
+    });
+
+    describe('GET expense /:id', () => {
+        let expense: ExpenseInterface;
+        beforeAll(async () => {
+            expense = await Expense.create({
+                amount: 100,
+                name: 'test expense',
+                shop: 'test shop',
+                executor: {
+                    username: 'test',
+                    email: 'test@test.com',
+                },
+                participants: [
+                    {
+                        username: 'test',
+                        email: 'test@test.com',
+                    },
+                ],
+                transactionDate: DateTime.now().toISODate(),
+            });
+        });
+
+        afterAll(async () => {
+            await Expense.deleteMany({});
+        });
+
+        it('should return 401 if user is not authenticated', async () => {
+            const res = await request.get('/expenses/' + expense._id);
+
+            expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
+        });
+
+        it('should return 403 if user is not participant', async () => {
+            const token = await loginRequest('test2', 'test123');
+            const res = await request
+                .get('/expenses/' + expense._id)
+                .set({ Authorization: token });
+
+            expect(res.statusCode).toBe(HTTP_CODES.FORBIDDEN);
+        });
+
+        it('should return 200 and valid response', async () => {
+            const token = await loginRequest();
+            const res = await request
+                .get('/expenses/' + expense._id)
+                .set({ Authorization: token });
+
+            expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
+            expect(Object.keys(res.body)).toEqual(
+                expect.arrayContaining([
+                    '_id',
+                    'name',
+                    'shop',
+                    'amount',
+                    'executor',
+                    'participants',
+                    'transactionDate',
+                    'createdAt',
+                ])
+            );
+        });
+    });
+
+    describe('DELETE /expenses/:id', () => {
+        let expense: ExpenseInterface;
+        beforeAll(async () => {
+            expense = await Expense.create({
+                amount: 100,
+                name: 'test expense',
+                shop: 'test shop',
+                executor: {
+                    username: 'test',
+                    email: 'test@test.com',
+                },
+                participants: [
+                    {
+                        username: 'test',
+                        email: 'test@test.com',
+                    },
+                    {
+                        username: 'test',
+                        email: 'test@test.com',
+                    },
+                ],
+                transactionDate: DateTime.now().toISODate(),
+            });
+        });
+
+        afterAll(async () => {
+            await Expense.deleteMany({});
+        });
+
+        it('should return 401 if user is not authenticated', async () => {
+            const res = await request.delete('/expenses/' + expense._id);
+
+            expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
+        });
+
+        it('should return 403 if user is not executor', async () => {
+            const token = await loginRequest('test2', 'test123');
+            const res = await request
+                .delete('/expenses/' + expense._id)
+                .set({ Authorization: token });
+
+            expect(res.statusCode).toBe(HTTP_CODES.FORBIDDEN);
+        });
+
+        it('should return 204 and delete expense', async () => {
+            const token = await loginRequest();
+            const res = await request
+                .delete('/expenses/' + expense._id)
+                .set({ Authorization: token });
+
+            const findExpense = await Expense.findById(expense._id);
+
+            expect(res.statusCode).toBe(HTTP_CODES.NO_CONTENT);
+            expect(findExpense).toBeNull();
         });
     });
 });

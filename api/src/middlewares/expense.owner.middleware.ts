@@ -11,7 +11,7 @@ export class ExpenseOwnerMiddleware implements MiddlewareInterface {
 
         if (expense?.executor.username !== req.user.username) {
             throw new HttpExceptions.AccessDenied(
-                'Only owner have access to this response'
+                'Only owner can edit expense'
             );
         }
 

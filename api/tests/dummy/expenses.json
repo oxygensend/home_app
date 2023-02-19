@@ -1,0 +1,187 @@
+[
+  {
+    "amount": 100,
+    "name": "test expense",
+    "shop": "test shop",
+    "executor": {
+      "username": "test",
+      "email": "test@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  },
+  {
+    "amount": 100,
+    "name": "test expense2",
+    "shop": "test shop",
+    "executor": {
+      "username": "test",
+      "email": "test@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  },
+  {
+    "amount": 100,
+    "name": "test expense3",
+    "shop": "test shop",
+    "executor": {
+      "username": "test",
+      "email": "test@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  },
+  {
+    "amount": 100,
+    "name": "test expense4",
+    "shop": "test shop",
+    "executor": {
+      "username": "test",
+      "email": "test@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  },
+  {
+    "amount": 100,
+    "executor": {
+      "username": "test2",
+      "email": "test2@test.com"
+    },
+    "participants": [
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-05T13:00:00"
+  },
+  {
+    "amount": 100,
+    "name": "test expense5",
+    "shop": "test shop2",
+    "executor": {
+      "username": "test2",
+      "email": "test2@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  },
+  {
+    "amount": 10,
+    "shop": "test shop4",
+    "executor": {
+      "username": "test2",
+      "email": "test2@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-05T13:00:00"
+  },
+  {
+    "amount": 100,
+    "executor": {
+      "username": "test",
+      "email": "test@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  },
+  {
+    "amount": 1090,
+    "executor": {
+      "username": "test2",
+      "email": "test2@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-10T13:00:00"
+  },
+  {
+    "amount": 100,
+    "name": "test expense10",
+    "shop": "test shop",
+    "executor": {
+      "username": "test2",
+      "email": "test2@test.com"
+    },
+    "participants": [
+      {
+        "username": "test",
+        "email": "test@test.com"
+      },
+      {
+        "username": "test2",
+        "email": "test2@test.com"
+      }
+    ],
+    "transactionDate": "2023-02-01T13:00:00"
+  }
+]
