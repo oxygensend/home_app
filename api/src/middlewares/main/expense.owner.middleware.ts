@@ -1,7 +1,7 @@
 import { MiddlewareInterface } from './middleware.interface';
 import { NextFunction, Request, Response } from 'express';
-import { Expense } from '../models/expense.model';
-import { HttpExceptions } from '../exceptions/exceptions';
+import { Expense } from '../../models/expense.model';
+import { HttpExceptions } from '../../exceptions';
 import {Service} from "typedi";
 
 @Service()

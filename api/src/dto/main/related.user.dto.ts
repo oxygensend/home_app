@@ -1,4 +1,4 @@
-import { Required } from '../decorators/validation';
+import { Required } from '../../decorators/validation';
 import { IsEmail, IsString } from 'class-validator';
 import { DtoInterface } from './dto.interface';
 

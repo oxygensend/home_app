@@ -1,5 +1,5 @@
 import { Container } from 'typedi';
-import { MiddlewareInterface } from '../middlewares/middleware.interface';
+import {MiddlewareInterface} from "../../middlewares";
 
 /**
  * Abstract Factory creating and binding middlewares

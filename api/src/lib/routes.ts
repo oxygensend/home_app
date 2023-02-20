@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Method, IRoute } from '../decorators/routing/route.types';
 import { Container } from 'typedi';
 import 'reflect-metadata';
-import { MiddlewareFactory } from '../factories/middleware.factory';
+import { MiddlewareFactory } from '../factories';
 import * as fs from 'fs';
 import { config } from '../config/config';
 import * as path from 'path';

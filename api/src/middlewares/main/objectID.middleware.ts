@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
 import { MiddlewareInterface } from './middleware.interface';
 import { Service } from 'typedi';
-import { HttpExceptions } from '../exceptions/exceptions';
+import { HttpExceptions } from '../../exceptions';
 
 @Service()
 export class ObjectIDMiddleware implements MiddlewareInterface {

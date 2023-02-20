@@ -1,14 +1,16 @@
 import { Service } from 'typedi';
 import { Request, Response } from 'express';
-import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { Logger } from '../lib/logger';
 import winston from 'winston';
 import { Controller, Delete, Get, Patch, Post } from '../decorators/routing';
-import { ExpenseService } from '../services/expense.service';
+import { ExpenseService } from '../services';
 import { HTTP_CODES } from '../config/http.codes';
-import { ExpenseOwnerMiddleware } from '../middlewares/expense.owner.middleware';
-import { ObjectIDMiddleware } from '../middlewares/objectID.middleware';
-import { MonthMiddleware } from '../middlewares/month.middleware';
+import {
+    AuthMiddleware,
+    ExpenseOwnerMiddleware,
+    MonthMiddleware,
+    ObjectIDMiddleware,
+} from '../middlewares';
 
 @Service()
 @Controller('/expenses')

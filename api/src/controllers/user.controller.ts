@@ -1,14 +1,12 @@
 import { Service } from 'typedi';
 import { Logger } from '../lib/logger';
 import winston from 'winston';
-import { LoginDto } from '../dto/login.dto';
-import { UserService } from '../services/user.service';
-import { RefreshTokenDto } from '../dto/refresh.token.dto';
+import { UserService } from '../services';
 import { Response } from 'express';
-import { ObjectIDMiddleware } from '../middlewares/objectID.middleware';
-import { AuthMiddleware } from '../middlewares/auth.middleware';
-import { DtoFactory } from '../factories/dto.factory';
+import { DtoFactory } from '../factories';
 import {Controller, Get, Post} from "../decorators/routing";
+import {AuthMiddleware, ObjectIDMiddleware} from "../middlewares";
+import {LoginDto, RefreshTokenDto} from "../dto";
 
 @Service()
 @Controller()
