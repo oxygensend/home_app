@@ -43,8 +43,11 @@ export default class ExpensesController {
 
     @Get('/excerpts/:month', [AuthMiddleware, MonthMiddleware])
     public async getExcerptsByMonth(req: Request, res: Response) {
-        const response = await this.expenseService.getByMonth(req.params.month);
-        return res.status(HTTP_CODES.SUCCESS).json({});
+        const response = await this.expenseService.getByMonth(
+            req.params.month,
+            req.query
+        );
+        return res.status(HTTP_CODES.SUCCESS).json(response);
     }
 
     @Get('/:id', [AuthMiddleware, ObjectIDMiddleware])
