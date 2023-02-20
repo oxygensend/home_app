@@ -1,0 +1,26 @@
+[
+  {
+    "username": "test",
+    "name": "Test name",
+    "surname": "Test surname",
+    "email": "test@test.com",
+    "password": "$2b$10$6rHA4Aj5c3XtqokiMqQeWu6WNsP2ePc2w7Spsxn9IhoVFg97CYziS",
+    "admin": true
+  },
+  {
+    "username": "test2",
+    "name": "Test name2",
+    "surname": "Test surname2",
+    "email": "test2@test.com",
+    "password": "$2b$10$6rHA4Aj5c3XtqokiMqQeWu6WNsP2ePc2w7Spsxn9IhoVFg97CYziS",
+    "admin": true
+  },
+  {
+    "username": "test3",
+    "name": "Test name3",
+    "surname": "Test surname3",
+    "email": "test3@test.com",
+    "password": "$2b$10$6rHA4Aj5c3XtqokiMqQeWu6WNsP2ePc2w7Spsxn9IhoVFg97CYziS",
+    "admin": true
+  }
+]

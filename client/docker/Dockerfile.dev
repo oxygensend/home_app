@@ -1,0 +1,15 @@
+FROM node:19.6
+WORKDIR /app
+
+COPY package.json ./
+COPY yarn.lock ./
+COPY tsconfig.json .
+
+RUN npm install -g typescript
+RUN npm install -g ts-node
+
+COPY . .
+RUN yarn install
+
+EXPOSE 4001
+CMD ["yarn", "run", "start"]
