@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpException, HttpExceptions } from '../exceptions/exceptions';
+import { HttpException, HttpExceptions } from '../../exceptions';
 import { Service } from 'typedi';
 import { MiddlewareInterface } from './middleware.interface';
 

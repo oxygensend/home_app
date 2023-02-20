@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Service } from 'typedi';
-import { Authenticator } from '../crypto/auth/authenticator';
-import { HttpExceptions } from '../exceptions/exceptions';
+import { Authenticator } from '../../crypto/auth/authenticator';
+import { HttpExceptions } from '../../exceptions';
 import Unauthorized = HttpExceptions.Unauthorized;
 import { MiddlewareInterface } from './middleware.interface';
 

@@ -1,21 +1,19 @@
-import { ExpensePostDto } from '../dto/expense.post.dto';
-import { Expense, ExpenseInterface } from '../models/expense.model';
+import { Expense, ExpenseInterface } from '../../models/expense.model';
 import winston from 'winston';
-import { Logger } from '../lib/logger';
-import { Shop } from '../models/shop.model';
+import { Logger } from '../../lib/logger';
+import { Shop } from '../../models/shop.model';
 import { Request } from 'express';
-import { DtoFactory } from '../factories/dto.factory';
+import { DtoFactory } from '../../factories';
 import { Service } from 'typedi';
-import { ExpensePatchDto } from '../dto/expense.patch.dto';
-import { HttpExceptions } from '../exceptions/exceptions';
-import { RelatedUserDto } from '../dto/related.user.dto';
-import { ExpensesHelper } from '../helpers/expenses.helper';
+import { HttpExceptions } from '../../exceptions';
+import { ExpenseHelper } from '../../helpers';
+import { ExpensePatchDto, ExpensePostDto, RelatedUserDto } from '../../dto';
 
 @Service()
 export class ExpenseService {
     private logger: winston.Logger;
 
-    constructor(private readonly expenseHelper: ExpensesHelper) {
+    constructor(private readonly expenseHelper: ExpenseHelper) {
         this.logger = Logger.getLogger();
     }
 
@@ -92,7 +90,10 @@ export class ExpenseService {
             month,
             filters
         );
-        const expenses = await this.expenseHelper.getExpensesByMonth(month, filters);
+        const expenses = await this.expenseHelper.getExpensesByMonth(
+            month,
+            filters
+        );
         return {
             expenses: expenses,
             balance: balance,

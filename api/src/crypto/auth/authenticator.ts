@@ -4,7 +4,7 @@ import {SessionManager} from "./session.manager";
 import {TokenStorage} from "../storage/token.storage";
 import {Logger} from "../../lib/logger";
 import {AuthPayloadInterface, AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto.types";
-import {App, HttpExceptions} from "../../exceptions/exceptions";
+import {App, HttpExceptions} from "../../exceptions";
 import { User} from "../../models/user.model";
 import {DateTime} from "luxon";
 

@@ -1,44 +1,41 @@
+import { DtoInterface } from './dto.interface';
 import {
     IsArray,
     IsDateString,
     IsNumber,
-    IsObject,
-    IsOptional,
-    IsString,
+    IsObject, IsOptional, IsString,
     ValidateNested,
 } from 'class-validator';
-import { ExistingUser } from '../decorators/validation';
+import { ExistingUser, Required } from '../../decorators/validation';
 import { Type } from 'class-transformer';
 import { RelatedUserDto } from './related.user.dto';
-import { DtoInterface } from './dto.interface';
 
-export class ExpensePatchDto implements DtoInterface {
-    @IsOptional()
+export class ExpensePostDto implements DtoInterface {
     @IsString()
+    @IsOptional()
     name: string;
 
-    @IsOptional()
     @IsNumber()
+    @Required()
     amount: number;
 
-    @IsOptional()
     @IsString()
+    @IsOptional()
     shop: string;
 
-    @IsOptional()
     @IsObject()
     @ValidateNested()
     @Type(() => RelatedUserDto)
     @ExistingUser()
     executor: RelatedUserDto;
 
-    @IsOptional()
+    @Required()
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => RelatedUserDto)
     participants: Array<RelatedUserDto>;
 
-    @IsOptional()
     @IsDateString()
+    @Required()
     transactionDate: Date;
 }

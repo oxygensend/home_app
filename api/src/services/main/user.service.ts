@@ -1,16 +1,15 @@
 import winston from "winston";
-import {Logger} from "../lib/logger";
-import {LoginDto} from "../dto/login.dto";
-import {User} from "../models/user.model";
-import {HttpExceptions} from "../exceptions/exceptions";
+import {Logger} from "../../lib/logger";
+import {User} from "../../models/user.model";
+import {HttpExceptions} from "../../exceptions";
 import * as bcrypt from "bcrypt";
-import {TokenStorage} from "../crypto/storage/token.storage";
-import {AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../crypto/crypto.types";
+import {TokenStorage} from "../../crypto/storage/token.storage";
+import {AuthResponseInterface, RefreshPayloadInterface, TokenType} from "../../crypto/crypto.types";
 import {Service} from "typedi";
-import {RefreshTokenDto} from "../dto/refresh.token.dto";
-import {Authenticator} from "../crypto/auth/authenticator";
-import {SessionManager} from "../crypto/auth/session.manager";
+import {Authenticator} from "../../crypto/auth/authenticator";
+import {SessionManager} from "../../crypto/auth/session.manager";
 import {DateTime} from "luxon";
+import {LoginDto, RefreshTokenDto} from "../../dto";
 
 /**
  * Class responsible for user data manipulation

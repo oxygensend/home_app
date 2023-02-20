@@ -7,8 +7,8 @@ import 'express-async-errors';
 import * as os from 'os';
 import { parse } from 'express-form-data';
 import cors from 'cors';
-import { ErrorMiddleware } from '../middlewares/error.middleware';
-import { MiddlewareFactory } from '../factories/middleware.factory';
+import {MiddlewareFactory} from "../factories";
+import {ErrorMiddleware} from "../middlewares";
 
 export class Server {
     private readonly app: Application;

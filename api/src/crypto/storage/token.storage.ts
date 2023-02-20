@@ -3,7 +3,7 @@ import {Service} from "typedi";
 import {TokenPayloadInterface, TokenType} from "../crypto.types";
 import * as jwt from 'jsonwebtoken';
 import {DateTime} from "luxon";
-import {App} from "../../exceptions/exceptions";
+import {App} from "../../exceptions";
 import {config} from "../../config/config";
 
 /**

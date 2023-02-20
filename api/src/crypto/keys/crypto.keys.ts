@@ -1,6 +1,6 @@
 import fs from "fs";
 import {config} from "../../config/config";
-import {App} from "../../exceptions/exceptions";
+import {App} from "../../exceptions";
 import {Service} from "typedi";
 
 /**
