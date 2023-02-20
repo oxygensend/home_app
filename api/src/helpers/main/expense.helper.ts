@@ -4,7 +4,7 @@ import { HttpExceptions } from '../../exceptions';
 import {ExpenseFilterInterface, ExpenseSortEnum} from "../../filters";
 
 @Service()
-export class ExpensesHelper {
+export class ExpenseHelper {
     public getExpensesByMonth(
         month: string,
         filters: ExpenseFilterInterface

@@ -6,14 +6,14 @@ import { Request } from 'express';
 import { DtoFactory } from '../../factories';
 import { Service } from 'typedi';
 import { HttpExceptions } from '../../exceptions';
-import { ExpensesHelper } from '../../helpers';
+import { ExpenseHelper } from '../../helpers';
 import { ExpensePatchDto, ExpensePostDto, RelatedUserDto } from '../../dto';
 
 @Service()
 export class ExpenseService {
     private logger: winston.Logger;
 
-    constructor(private readonly expenseHelper: ExpensesHelper) {
+    constructor(private readonly expenseHelper: ExpenseHelper) {
         this.logger = Logger.getLogger();
     }
 
