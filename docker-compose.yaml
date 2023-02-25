@@ -39,7 +39,6 @@ services:
         networks:
             - app
         volumes:
-            - /app/node_modules
             - ./client:/app
 
     mongo:

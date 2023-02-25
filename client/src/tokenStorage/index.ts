@@ -5,3 +5,7 @@ export const setAccessToken = (token: string) => {
 export const setRefreshToken = (token: string) => {
     window.localStorage.setItem('refreshToken', token);
 };
+
+export const getAccessToken = () => {
+    return window.localStorage.getItem('accessToken');
+};
