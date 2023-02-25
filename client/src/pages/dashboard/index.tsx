@@ -1,7 +1,11 @@
+import {Layout} from "../../components/layout";
+
 export const Dashboard = ({}) => {
+
     return (
-        <div>
-            ssss
-        </div>
+        <Layout>
+            <div>
+            </div>
+        </Layout>
     )
-}
+};
