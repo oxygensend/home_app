@@ -9,7 +9,8 @@ import {
 import { Dashboard } from './pages/dashboard';
 import { Login } from './pages/login';
 import { ProtectedRoute } from './components/protectedRoute';
-import { getAccessToken } from './tokenStorage';
+import { getAccessToken } from './services/tokenStorage';
+import {Expenses} from "./pages/expenses";
 
 function App() {
     const isAuthorized = !!getAccessToken();
@@ -41,6 +42,17 @@ function App() {
                             redirect={'/'}
                         >
                             <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path={'expenses'}
+                    element={
+                        <ProtectedRoute
+                            isAuthorized={isAuthorized}
+                            redirect={'/'}
+                        >
+                            <Expenses />
                         </ProtectedRoute>
                     }
                 />

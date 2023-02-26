@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { Input } from '../input';
 import { SubmitButton } from '../submitButton';
 import axios from 'axios';
-import { setAccessToken, setRefreshToken } from '../../tokenStorage';
+import { setAccessToken, setRefreshToken } from '../../services/tokenStorage';
 import { useState } from 'react';
 import loginMain from "../../assets/images/login_main.jpg";
 

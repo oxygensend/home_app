@@ -1,11 +1,12 @@
 import { MenuItemProps } from './menuItem.props';
 
-export const MenuItem = ({ name, imageSrc, imageAlt }: MenuItemProps) => {
+export const MenuItem = ({ name, imageSrc, imageAlt, redirect, onClick }: MenuItemProps) => {
     return (
         <div
             className={
                 'w-11/12  content-center hover:bg-pink-800 hover:text-pink-300 flex flex-row gap-3 rounded cursor-pointer'
             }
+            onClick={() => onClick ? onClick(): null}
         >
             <img
                 src={imageSrc}
@@ -14,7 +15,7 @@ export const MenuItem = ({ name, imageSrc, imageAlt }: MenuItemProps) => {
                 width={17}
                 className={'ml-2'}
             />
-            <p className={'pt-2 pb-2 font-semibold text-lg'}>{name}</p>
+            <a className={'pt-2 pb-2 font-semibold text-lg'} href={redirect}>{name}</a>
         </div>
     );
 };

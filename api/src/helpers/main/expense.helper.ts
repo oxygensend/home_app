@@ -24,6 +24,7 @@ export class ExpenseHelper {
         }).select({
             _id: 1,
             amount: 1,
+            shop: 1,
             executor: 1,
             participants: 1,
             transactionDate: 1,

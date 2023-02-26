@@ -4,6 +4,7 @@ import expenses from '../../assets/images/sidebar/expenses.svg';
 import calendar from '../../assets/images/sidebar/calendar.svg';
 import singOut from '../../assets/images/sidebar/sing-out.svg';
 import { MenuItem } from './menuItem';
+import {removeTokens} from "../../services/tokenStorage";
 
 type SidebarProps = {
     isOpen: boolean,
@@ -14,7 +15,7 @@ type SidebarProps = {
 export const Sidebar = ({ isOpen, width, toggleSideBar }: SidebarProps) => {
     return (
         <div
-            className={`h-screen  lg:w-64 w-full flex flex-row  ${
+            className={`h-screen  lg:w-64 w-full flex flex-row  fixed top-0 ${
                 width > 1023 || isOpen ? 'block' : 'hidden'
             }`}
         >
@@ -32,27 +33,32 @@ export const Sidebar = ({ isOpen, width, toggleSideBar }: SidebarProps) => {
                         name={'Dashboard'}
                         imageSrc={dashboard}
                         imageAlt={'dashboard'}
+                        redirect={'/dashboard'}
                     />
 
                     <MenuItem
                         name={'Expenses'}
                         imageSrc={expenses}
                         imageAlt={'expenses'}
+                        redirect={'/expenses'}
                     />
                     <MenuItem
                         name={'Calendar'}
                         imageSrc={calendar}
                         imageAlt={'calendar'}
+                        redirect={'/calendar'}
                     />
                     <MenuItem
                         name={'Sing out'}
                         imageSrc={singOut}
                         imageAlt={'sing out'}
+                        redirect={'/'}
+                        onClick={removeTokens}
                     />
                 </div>
             </div>
             <div
-                className={'h-full  grow '}
+                className={'h-full  grow bg-[#1e2a4a] '}
                 onClick={() => {
                     toggleSideBar();
                 }}

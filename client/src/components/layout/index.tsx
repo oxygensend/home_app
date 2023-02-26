@@ -3,7 +3,7 @@ import { Navbar } from '../navbar';
 import { useEffect, useState } from 'react';
 
 type LayoutProps = {
-    children: JSX.Element;
+    children: JSX.Element|null;
 };
 export const Layout = ({ children }: LayoutProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -26,7 +26,7 @@ export const Layout = ({ children }: LayoutProps) => {
     };
 
     return (
-        <div className={'lg:grid lg:grid-cols-12'}>
+        <div className={'lg:grid lg:grid-cols-12 h-full'}>
             <Navbar
                 isOpen={!isOpen}
                 toggleSideBar={toggleSidebar}
@@ -37,7 +37,7 @@ export const Layout = ({ children }: LayoutProps) => {
                 toggleSideBar={toggleSidebar}
                 width={width}
             />
-            <div className={'lg:col-start-4 lg:col-span-9 lg:mt-20'}>
+            <div className={'lg:col-start-4 lg:col-span-9 lg:mt-10 mt-20 h-screen'}>
                 {children}
             </div>
         </div>
