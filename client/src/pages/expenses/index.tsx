@@ -21,26 +21,22 @@ export const Expenses = ({}) => {
     const [month, setMonth] = useState(moment());
 
     useEffect(() => {
-        console.log('render');
-        return () => {
-            authAxios
-                .get<ExpenseExcerptsResponse>(
-                    '/api/expenses/excerpts/' + month.format('YYYY-MM')
-                )
-                .then((res) => {
-                    setExpenses(res.data.expenses);
-                    setBalance(res.data.balance);
-                    setTotal(res.data.total);
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        };
-    }, [month, setMonth]);
+        authAxios
+            .get<ExpenseExcerptsResponse>(
+                '/api/expenses/excerpts/' + month.format('YYYY-MM')
+            )
+            .then((res) => {
+                setExpenses(res.data.expenses);
+                setBalance(res.data.balance);
+                setTotal(res.data.total);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    }, [month]);
 
     const addMonth = (nb: number) => {
-        const previousMonth = month.add(nb, 'month');
-        console.log(month);
+        const previousMonth = month.clone().add(nb, 'month');
         setMonth(previousMonth);
     };
 
@@ -81,7 +77,12 @@ export const Expenses = ({}) => {
                         <BalanceTable balance={balance} total={total} />
                     ) : null}
                 </div>
+                <div className={"bg-pink-600 text-gray-50 rounded items-center h-14 text-xl flex justify-center w-64 mt-10 mb-5"}>
+                    Add new expense
+                </div>
             </div>
+
+
         </Layout>
     );
 };

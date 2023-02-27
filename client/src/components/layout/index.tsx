@@ -37,7 +37,7 @@ export const Layout = ({ children }: LayoutProps) => {
                 toggleSideBar={toggleSidebar}
                 width={width}
             />
-            <div className={'lg:col-start-4 lg:col-span-9 lg:mt-10 mt-20 h-screen'}>
+            <div className={'lg:col-start-3 lg:col-span-10 lg:mt-10 mt-20 h-screen '}>
                 {children}
             </div>
         </div>
