@@ -11,10 +11,15 @@ export const ExpensesList = ({ expenses }: ExpensesListProps) => {
                 'bg-pink-300 mt-10 h-2/3  w-96 md:w-128 xl:w-140 rounded-lg flex flex-col divide-y divide-gray-500 overflow-auto no-scrollbar'
             }
         >
-            {expenses.length > 0 ? expenses.map((expense, i) => {
-                return <ExpensesElement expense={expense} key={i} />;
-            }) :
-            <p className={"italic text-center relative top-1/2 text-xl"}>Brak wydatków</p>}
+            {expenses.length > 0 ? (
+                expenses.map((expense, i) => {
+                    return <ExpensesElement expense={expense} key={i} />;
+                })
+            ) : (
+                <p className={'italic text-center relative top-1/2 text-xl'}>
+                    Brak wydatków
+                </p>
+            )}
         </div>
     );
 };

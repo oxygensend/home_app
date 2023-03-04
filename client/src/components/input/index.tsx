@@ -1,29 +1,38 @@
 import { InputProps } from './input.props';
+import { Error } from '../error';
 
 export const Input = ({
     name,
+    label,
     type,
     required,
     placeholder,
     register,
     className,
     error,
+    width,
+    defaultValue,
+    step,
 }: InputProps) => {
-    console.log(error);
     return (
-        <>
+        <div className={`flex flex-col gap-1 ${width ? width : 'w-5/6'}`}>
+            <label className={'text-left text-pink-50 font-semibold'}>
+                {label}
+            </label>
             <input
                 {...register(name)}
                 name={name}
                 type={type}
+                step={step}
                 required={required}
+                defaultValue={defaultValue}
                 className={
                     className ??
-                    'border border-gray-300 rounded-xl px-3 py-2 w-full text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500'
+                    `py-2.5 px-0  bg-transparent border-0 border-b-2 appearance-none text-gray-400 border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`
                 }
                 placeholder={placeholder}
             />
-            {error ? <p className={"font-medium tracking-wide text-red-500 text-xs"}>{error}</p> : null}
-        </>
+            {error && <Error error={error} />}
+        </div>
     );
 };

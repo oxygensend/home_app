@@ -30,7 +30,7 @@ export const BalanceTable = ({balance, total}: BalanceTableType) => {
             {balance
                 ? balance.map((b, i) => {
                     return (
-                        <tr className="bg-gray-800">
+                        <tr className="bg-gray-800" key={i}>
                             <th
                                 scope="row"
                                 className="px-6 py-4 font-medium  whitespace-nowrap text-white"

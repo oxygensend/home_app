@@ -7,6 +7,7 @@ import { DtoFactory } from '../factories';
 import {Controller, Get, Post} from "../decorators/routing";
 import {AuthMiddleware, ObjectIDMiddleware} from "../middlewares";
 import {LoginDto, RefreshTokenDto} from "../dto";
+import {User} from "../models/user.model";
 
 @Service()
 @Controller()
@@ -36,9 +37,16 @@ export default class UserController {
         const response = await this.userService.refreshToken(dto);
         return res.json(response).status(200);
     }
+    @Get('/users/list', [AuthMiddleware])
+    public async getUsersList(req: Request, res: Response) {
+        const users = await User.find({}).select({username: 1, email: 1, _id: 0});
+        return res.json(users).status(200);
+    }
 
     @Get('/users/:id', [AuthMiddleware, ObjectIDMiddleware])
     public async getUser(req: Request, res: Response) {
         console.log(req);
     }
+
+
 }

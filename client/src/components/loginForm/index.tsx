@@ -52,19 +52,23 @@ export const LoginForm = ({}) => {
 
             <Input
                 name={'username'}
+                label={"Username"}
                 type={'text'}
                 required={true}
                 register={register}
                 placeholder={'Enter your username'}
+                width={'w-full'}
             />
 
             <Input
                 name={'password'}
                 type={'password'}
+                label={'Password'}
                 required={true}
                 register={register}
                 placeholder={'Enter your password'}
                 error={error}
+                width={'w-full'}
             />
 
             <SubmitButton value={'Sign in'} />

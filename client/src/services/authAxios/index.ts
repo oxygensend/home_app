@@ -41,7 +41,7 @@ instance.interceptors.response.use(
                     const response = await axios.post(
                         '/api/refresh_token',
                         {
-                            refresh_token: getRefreshToken(),
+                            token: getRefreshToken(),
                         },
                         {
                             headers: {

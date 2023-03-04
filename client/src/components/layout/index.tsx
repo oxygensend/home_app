@@ -1,6 +1,7 @@
 import { Sidebar } from '../sidebar';
 import { Navbar } from '../navbar';
 import { useEffect, useState } from 'react';
+import {Flash} from "../flash";
 
 type LayoutProps = {
     children: JSX.Element|null;
@@ -27,6 +28,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
     return (
         <div className={'lg:grid lg:grid-cols-12 h-full'}>
+
             <Navbar
                 isOpen={!isOpen}
                 toggleSideBar={toggleSidebar}
@@ -40,6 +42,7 @@ export const Layout = ({ children }: LayoutProps) => {
             <div className={'lg:col-start-3 lg:col-span-10 lg:mt-10 mt-20 h-screen '}>
                 {children}
             </div>
+            <Flash/>
         </div>
     );
 };
