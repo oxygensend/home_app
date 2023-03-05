@@ -3,16 +3,12 @@ import { SubmitButton } from '../submitButton';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import authAxios from '../../services/authAxios';
-import {
-    ExcerptExpense,
-    ExpenseResponse,
-    ShopType,
-    UserType,
-} from '../../types';
+import { ExcerptExpense, Expense, ShopType, UserType } from '../../types';
 import { Select } from '../select';
 import { ShopSelect } from '../shopSelect';
 import { getTodayIsoDate } from '../../utils/getTodayIsoDate';
 import { findPropertyViolation } from '../../utils/findPropertyViolation';
+import moment from 'moment';
 
 type FormValues = {
     name: string;
@@ -20,15 +16,16 @@ type FormValues = {
     executor: string;
     participants: Array<string>;
     shop: string;
-    transactionDate: Date;
+    transactionDate: string;
 };
 
 type ExpenseFormProps = {
-    afterSubmit: (data: ExpenseResponse) => void;
+    request: (data: any) => void;
+    expense?: Expense;
 };
 
-export const ExpenseForm = ({ afterSubmit }: ExpenseFormProps) => {
-    const { register, handleSubmit } = useForm<FormValues>();
+export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
+    const { register, handleSubmit, reset } = useForm<FormValues>();
     const [errors, setErrors] = useState([]);
     const [usersList, setUsersList] = useState<UserType[]>([]);
     const [shopList, setShopList] = useState<ShopType[]>([]);
@@ -38,11 +35,30 @@ export const ExpenseForm = ({ afterSubmit }: ExpenseFormProps) => {
         Promise.all([
             authAxios.get<UserType[]>('/api/users/list'),
             authAxios.get<ShopType[]>('/api/shops'),
-        ]).then( ([users, shops]) => {
+        ]).then(([users, shops]) => {
             setUsersList(users.data);
             setShopList(shops.data);
         });
     }, []);
+
+    useEffect(() => {
+        return () => {
+            if (expense) {
+                reset({
+                    name: expense.name,
+                    amount: expense.amount.toString(),
+                    shop: expense.shop,
+                    executor: expense.executor.username,
+                    participants: expense.participants.map(
+                        (user) => user.username
+                    ),
+                    transactionDate: moment(expense.transactionDate).format(
+                        'YYYY-MM-DD'
+                    ),
+                });
+            }
+        };
+    }, [expense]);
 
     const onSubmit = async (body: FormValues) => {
         try {
@@ -56,19 +72,14 @@ export const ExpenseForm = ({ afterSubmit }: ExpenseFormProps) => {
             const date = new Date(body.transactionDate).toISOString();
             const shop = body.shop === shopDefaultSelectText ? null : body.shop;
 
-            const { data } = await authAxios.post<ExpenseResponse>(
-                '/api/expenses',
-                {
-                    ...body,
-                    executor: executor,
-                    participants: participants,
-                    transactionDate: date,
-                    shop: shop,
-                    amount: parseFloat(body.amount),
-                }
-            );
-
-            afterSubmit(data);
+            await request({
+                ...body,
+                executor: executor,
+                participants: participants,
+                transactionDate: date,
+                shop: shop,
+                amount: parseFloat(body.amount),
+            });
         } catch (err: any) {
             console.log(err);
             if (err.response.status === 400) {
