@@ -3,8 +3,9 @@ import { ExcerptExpense } from '../../types';
 
 type ExpensesListProps = {
     expenses: ExcerptExpense[];
+    onExpenseClickHandler: (_id: string) => void
 };
-export const ExpensesList = ({ expenses }: ExpensesListProps) => {
+export const ExpensesList = ({ expenses, onExpenseClickHandler }: ExpensesListProps) => {
     return (
         <div
             className={
@@ -13,10 +14,10 @@ export const ExpensesList = ({ expenses }: ExpensesListProps) => {
         >
             {expenses.length > 0 ? (
                 expenses.map((expense, i) => {
-                    return <ExpensesElement expense={expense} key={i} />;
+                    return <ExpensesElement expense={expense} onExpenseClickHandler={onExpenseClickHandler} key={i} />;
                 })
             ) : (
-                <p className={'italic text-center relative top-1/2 text-xl'}>
+                <p className={'italic text-center  pt-60 text-xl'}>
                     Brak wydatków
                 </p>
             )}

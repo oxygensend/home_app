@@ -1,15 +1,26 @@
-import {Layout} from '../../components/layout';
-import {ReactComponent as ArrowRight} from '../../assets/images/arrow-right-solid.svg';
-import {ReactComponent as ArrowLeft} from '../../assets/images/arrow-left-solid.svg';
-import {useEffect, useState} from 'react';
+import { Layout } from '../../components/layout';
+import { ReactComponent as ArrowRight } from '../../assets/images/arrow-right-solid.svg';
+import { ReactComponent as ArrowLeft } from '../../assets/images/arrow-left-solid.svg';
+import {useCallback, useEffect, useState} from 'react';
 import authAxios from '../../services/authAxios';
-import {BalanceType, ExcerptExpense, ExpenseResponse} from '../../types';
-import {ExpensesList} from '../../components/expensesList';
-import {BalanceTable} from '../../components/balanceTable';
+import {
+    BalanceType,
+    ExcerptExpense,
+    Expense,
+    ModalEnum,
+} from '../../types';
+import { ExpensesList } from '../../components/expensesList';
+import { BalanceTable } from '../../components/balanceTable';
 import moment from 'moment';
-import {Modal} from '../../components/modal';
-import {ExpenseForm} from "../../components/expenseForm";
-import {setFlashMessage} from "../../utils/setFlashMessage";
+import { Modal } from '../../components/modal';
+import { ExpenseForm } from '../../components/expenseForm';
+import { setFlashMessage } from '../../utils/setFlashMessage';
+import { ExpenseCard } from '../../components/expenseCard';
+import { ConfirmationModal } from '../../components/confirmationModal';
+import { removeFromStateArray } from '../../utils/removeFromStateArray';
+import { getObjectDifference } from '../../utils/getObjectDifference';
+import { replaceElementsInObject } from '../../utils/replaceElementsInObject';
+import { mapExpenseToExpenseExcerpt } from '../../utils/mapExpenseToExpenseExcerpt';
 
 type ExpenseExcerptsResponse = {
     total: number;
@@ -19,11 +30,21 @@ type ExpenseExcerptsResponse = {
 
 export const Expenses = ({}) => {
     const [expenses, setExpenses] = useState<ExcerptExpense[]>([]);
+    const [selectedExpense, setSelectedExpense] = useState<Expense>();
     const [balance, setBalance] = useState<BalanceType[]>();
     const [total, setTotal] = useState<number>(0);
     const [month, setMonth] = useState(moment());
     const [isExpenseFormModalOpen, setIsExpenseFormModalOpen] =
         useState<boolean>(false);
+    const [isExpenseShowModalOpen, setIsExpenseShowModalOpen] =
+        useState<boolean>(false);
+    const [isExpenseDeleteModalOpen, setIsExpenseDeleteModalOpen] =
+        useState<boolean>(false);
+    const [isExpenseEditModalOpen, setIsExpenseEditModalOpen] =
+        useState<boolean>(false);
+
+    const { _id } = selectedExpense ?? {};
+
 
     useEffect(() => {
         authAxios
@@ -45,19 +66,66 @@ export const Expenses = ({}) => {
         setMonth(previousMonth);
     };
 
-    const addNewExpenseToList = (data: ExpenseResponse) => {
-        expenses.push({
-            _id: data._id,
-            shop: data.shop,
-            amount: data.amount,
-            executor: data.executor,
-            participants: data.participants,
-            transactionDate: data.transactionDate
-        });
+    const addNewExpenseRequest = async (body: any) => {
+        const { data } = await authAxios.post<Expense>(
+            '/api/expenses',
+            body
+        );
+
+        expenses.push(mapExpenseToExpenseExcerpt(data));
         setIsExpenseFormModalOpen(false);
         setFlashMessage('New expenses added successfully.');
+    };
 
-    }
+    const editExpenseRequest = async (body: Expense) => {
+        if (!selectedExpense) return;
+
+        const changedData = getObjectDifference(selectedExpense, body);
+
+        if (Object.keys(changedData).length) {
+            const {data} = await authAxios.patch<Expense>(
+                '/api/expenses/' + _id,
+                changedData
+            );
+        }
+
+        const updated = replaceElementsInObject<Expense>(
+            selectedExpense,
+            changedData
+        );
+        const index = expenses.findIndex(
+            (expense) => expense._id === _id
+        );
+        expenses.splice(index, 1, mapExpenseToExpenseExcerpt(updated));
+        setSelectedExpense(updated);
+        setIsExpenseEditModalOpen(false);
+        setFlashMessage('Expense has been edited.');
+    };
+
+    const onExpenseClickHandler = async (_id: string) => {
+        setIsExpenseShowModalOpen(true);
+        try {
+            const { data } = await authAxios.get<Expense>(
+                '/api/expenses/' + _id
+            );
+            setSelectedExpense(data);
+        } catch (err: any) {
+            console.log(err);
+        }
+    };
+
+    const onExpenseDeleteClickHandler = async () => {
+        try {
+            await authAxios.delete('/api/expenses/' + _id);
+            setSelectedExpense(undefined);
+            setIsExpenseDeleteModalOpen(false);
+            setExpenses(
+                removeFromStateArray(expenses, _id, '_id')
+            );
+        } catch (err: any) {
+            console.log(err);
+        }
+    };
 
     return (
         <Layout>
@@ -82,7 +150,12 @@ export const Expenses = ({}) => {
                     />
                 </div>
 
-                {expenses ? <ExpensesList expenses={expenses}/> : null}
+                {expenses ? (
+                    <ExpensesList
+                        expenses={expenses}
+                        onExpenseClickHandler={onExpenseClickHandler}
+                    />
+                ) : null}
                 <div className={'w-96 md:w-128 xl:w-140 mt-10'}>
                     <p
                         className={
@@ -93,7 +166,7 @@ export const Expenses = ({}) => {
                     </p>
 
                     {balance ? (
-                        <BalanceTable balance={balance} total={total}/>
+                        <BalanceTable balance={balance} total={total} />
                     ) : null}
                 </div>
                 <div
@@ -109,9 +182,46 @@ export const Expenses = ({}) => {
                     title={'Add new expense'}
                     isOpen={isExpenseFormModalOpen}
                     onClose={() => setIsExpenseFormModalOpen(false)}
+                    type={ModalEnum.COMMON}
                 >
-                    <ExpenseForm afterSubmit={addNewExpenseToList}/>
+                    <ExpenseForm request={addNewExpenseRequest} />
                 </Modal>
+
+                {selectedExpense && (
+                    <Modal
+                        title={'Edit expense'}
+                        isOpen={isExpenseEditModalOpen}
+                        onClose={() => setIsExpenseEditModalOpen(false)}
+                        type={ModalEnum.COMMON}
+                        order={'50'}
+                    >
+                        <ExpenseForm
+                            request={editExpenseRequest}
+                            expense={selectedExpense}
+                        />
+                    </Modal>
+                )}
+
+                {selectedExpense && (
+                    <ExpenseCard
+                        expense={selectedExpense}
+                        isOpen={isExpenseShowModalOpen}
+                        onClose={() => setIsExpenseShowModalOpen(false)}
+                        showDeleteModal={() =>
+                            setIsExpenseDeleteModalOpen(true)
+                        }
+                        showEditModal={() => {
+                            setIsExpenseEditModalOpen(true);
+                        }}
+                    />
+                )}
+
+                <ConfirmationModal
+                    isOpen={isExpenseDeleteModalOpen}
+                    onDecline={() => setIsExpenseDeleteModalOpen(false)}
+                    onAgree={() => onExpenseDeleteClickHandler()}
+                    content={'Are you sure of deleting this expense?'}
+                />
             </div>
         </Layout>
     );

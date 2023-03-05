@@ -58,7 +58,7 @@ export const Sidebar = ({ isOpen, width, toggleSideBar }: SidebarProps) => {
                 </div>
             </div>
             <div
-                className={'h-full  grow bg-[#1e2a4a] '}
+                className={'h-full  grow bg-[#1e2a4a] z-50'}
                 onClick={() => {
                     toggleSideBar();
                 }}

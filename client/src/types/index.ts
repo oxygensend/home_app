@@ -22,7 +22,7 @@ export type ExcerptExpense = {
     transactionDate: Date;
 };
 
-export type ExpenseResponse = {
+export type Expense = {
     _id: string;
     name: string;
     amount: number;
@@ -31,6 +31,7 @@ export type ExpenseResponse = {
     shop: string;
     transactionDate: Date;
     updatedAt: Date;
+    [key: string]: unknown;
 };
 
 export type Violation<T> = {
@@ -43,3 +44,8 @@ export type Violation<T> = {
 export type ErrorType = {
     [value: string]: string;
 };
+
+export enum ModalEnum {
+    COMMON = 'common',
+    CONFIRMATION = 'confirmation',
+}
