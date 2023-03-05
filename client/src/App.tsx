@@ -1,26 +1,65 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route } from 'react-router';
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    RouterProvider,
+} from 'react-router-dom';
+import { Dashboard } from './pages/dashboard';
+import { Login } from './pages/login';
+import { ProtectedRoute } from './components/protectedRoute';
+import { getAccessToken } from './services/tokenStorage';
+import {Expenses} from "./pages/expenses";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const isAuthorized = !!getAccessToken();
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <Route path={'/'}>
+                <Route
+                    path={''}
+                    element={
+                        <ProtectedRoute
+                            isAuthorized={!isAuthorized}
+                            redirect={'/dashboard'}
+                        >
+                            <Login />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path={'login'}
+                    element={
+                        <ProtectedRoute isAuthorized={false} redirect={'/'} />
+                    }
+                />
+                <Route
+                    path={'dashboard'}
+                    element={
+                        <ProtectedRoute
+                            isAuthorized={isAuthorized}
+                            redirect={'/'}
+                        >
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path={'expenses'}
+                    element={
+                        <ProtectedRoute
+                            isAuthorized={isAuthorized}
+                            redirect={'/'}
+                        >
+                            <Expenses />
+                        </ProtectedRoute>
+                    }
+                />
+            </Route>
+        )
+    );
+    return <RouterProvider router={router} />;
 }
 
 export default App;
