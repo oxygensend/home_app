@@ -44,7 +44,7 @@ export class Routes {
 
     public registerRoutes(): void {
         fs.readdirSync(config.controllersDirectory)
-            .filter((file) => file.endsWith('.controller.ts'))
+            .filter((file) => /\.(controller\.js|controller\.ts)$/.test(file))
             .forEach((file) => {
                 const controllerClass = require(path.join(
                     controllersDirectory,

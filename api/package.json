@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/app.ts",
     "test": "cross-env NODE_ENV=test jest  --verbose --runInBand ",
-    "test:watch": "yarn run test --watch  "
+    "test:watch": "yarn run test --watch  ",
+    "build": "tsc -p ."
+
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
