@@ -7,7 +7,7 @@ services:
             - client
         restart: always
         build:
-            dockerfile: docker/Dockerfile
+            dockerfile: nginx/docker/Dockerfile.dev
             context: ./nginx
         ports:
             - "3050:80"

@@ -7,7 +7,7 @@ services:
       - client
     restart: always
     build:
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.prod
       context: ./nginx
     ports:
       - "3050:80"
@@ -34,7 +34,7 @@ services:
     restart: always
     stdin_open: true
     build:
-      dockerfile: docker/Dockerfile.dev
+      dockerfile: docker/Dockerfile.prod
       context: ./client
     networks:
       - app
