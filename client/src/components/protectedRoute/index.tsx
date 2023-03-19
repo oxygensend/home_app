@@ -1,12 +1,11 @@
-import {ProtectedRouteProps} from "./protectedRoute.props";
-import {Navigate, Outlet} from "react-router-dom";
+import { ProtectedRouteProps } from './protectedRoute.props';
+import { Navigate, Outlet } from 'react-router-dom';
 
-export const ProtectedRoute = ({isAuthorized, redirect, children}: ProtectedRouteProps) => {
-
+export const ProtectedRoute = ({ isAuthorized, redirect, children }: ProtectedRouteProps) => {
     console.log(isAuthorized);
-    if(!isAuthorized){
-        return redirect ? <Navigate to={redirect}/> : <Navigate to={'/'}/> ;
+    if (!isAuthorized) {
+        return redirect ? <Navigate to={redirect} /> : <Navigate to={'/'} />;
     } else {
-        return children ? children : <Outlet/>
+        return children ? children : <Outlet />;
     }
-}
+};

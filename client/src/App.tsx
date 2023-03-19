@@ -1,16 +1,12 @@
 import React from 'react';
 import './App.css';
 import { Route } from 'react-router';
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import { Dashboard } from './pages/dashboard';
 import { Login } from './pages/login';
 import { ProtectedRoute } from './components/protectedRoute';
 import { getAccessToken } from './services/tokenStorage';
-import {Expenses} from "./pages/expenses";
+import { Expenses } from './pages/expenses';
 
 function App() {
     const isAuthorized = !!getAccessToken();
@@ -20,27 +16,16 @@ function App() {
                 <Route
                     path={''}
                     element={
-                        <ProtectedRoute
-                            isAuthorized={!isAuthorized}
-                            redirect={'/dashboard'}
-                        >
+                        <ProtectedRoute isAuthorized={!isAuthorized} redirect={'/dashboard'}>
                             <Login />
                         </ProtectedRoute>
                     }
                 />
-                <Route
-                    path={'login'}
-                    element={
-                        <ProtectedRoute isAuthorized={false} redirect={'/'} />
-                    }
-                />
+                <Route path={'login'} element={<ProtectedRoute isAuthorized={false} redirect={'/'} />} />
                 <Route
                     path={'dashboard'}
                     element={
-                        <ProtectedRoute
-                            isAuthorized={isAuthorized}
-                            redirect={'/'}
-                        >
+                        <ProtectedRoute isAuthorized={isAuthorized} redirect={'/'}>
                             <Dashboard />
                         </ProtectedRoute>
                     }
@@ -48,16 +33,13 @@ function App() {
                 <Route
                     path={'expenses'}
                     element={
-                        <ProtectedRoute
-                            isAuthorized={isAuthorized}
-                            redirect={'/'}
-                        >
+                        <ProtectedRoute isAuthorized={isAuthorized} redirect={'/'}>
                             <Expenses />
                         </ProtectedRoute>
                     }
                 />
-            </Route>
-        )
+            </Route>,
+        ),
     );
     return <RouterProvider router={router} />;
 }

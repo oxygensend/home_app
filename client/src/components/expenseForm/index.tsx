@@ -32,13 +32,12 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
     const shopDefaultSelectText = 'Choose shop';
 
     useEffect(() => {
-        Promise.all([
-            authAxios.get<UserType[]>('/api/users/list'),
-            authAxios.get<ShopType[]>('/api/shops'),
-        ]).then(([users, shops]) => {
-            setUsersList(users.data);
-            setShopList(shops.data);
-        });
+        Promise.all([authAxios.get<UserType[]>('/api/users/list'), authAxios.get<ShopType[]>('/api/shops')]).then(
+            ([users, shops]) => {
+                setUsersList(users.data);
+                setShopList(shops.data);
+            },
+        );
     }, []);
 
     useEffect(() => {
@@ -49,12 +48,8 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
                     amount: expense.amount.toString(),
                     shop: expense.shop,
                     executor: expense.executor.username,
-                    participants: expense.participants.map(
-                        (user) => user.username
-                    ),
-                    transactionDate: moment(expense.transactionDate).format(
-                        'YYYY-MM-DD'
-                    ),
+                    participants: expense.participants.map((user) => user.username),
+                    transactionDate: moment(expense.transactionDate).format('YYYY-MM-DD'),
                 });
             }
         };
@@ -62,12 +57,8 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
 
     const onSubmit = async (body: FormValues) => {
         try {
-            const executor = usersList.find(
-                (user: UserType) => user.username === body.executor
-            );
-            const participants = usersList.filter((user: UserType) =>
-                body.participants.includes(user.username)
-            );
+            const executor = usersList.find((user: UserType) => user.username === body.executor);
+            const participants = usersList.filter((user: UserType) => body.participants.includes(user.username));
 
             const date = new Date(body.transactionDate).toISOString();
             const shop = body.shop === shopDefaultSelectText ? null : body.shop;
@@ -90,10 +81,7 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
         }
     };
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className={'flex flex-col gap-3 items-center mb-5'}
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className={'flex flex-col gap-3 items-center mb-5'}>
             <Input
                 name={'name'}
                 label={'Name'}
@@ -137,10 +125,7 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
                 multiple={false}
                 width={' w-5/6'}
                 defaultOptionText={'Choose an executor'}
-                error={findPropertyViolation<ExcerptExpense>(
-                    errors,
-                    'executor'
-                )}
+                error={findPropertyViolation<ExcerptExpense>(errors, 'executor')}
             />
 
             <Select
@@ -153,10 +138,7 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
                 required={true}
                 multiple={true}
                 width={' w-5/6'}
-                error={findPropertyViolation<ExcerptExpense>(
-                    errors,
-                    'participants'
-                )}
+                error={findPropertyViolation<ExcerptExpense>(errors, 'participants')}
             />
 
             <Input
@@ -168,10 +150,7 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
                 placeholder={''}
                 width={' w-5/6'}
                 defaultValue={getTodayIsoDate()}
-                error={findPropertyViolation<ExcerptExpense>(
-                    errors,
-                    'transactionDate'
-                )}
+                error={findPropertyViolation<ExcerptExpense>(errors, 'transactionDate')}
             />
 
             <SubmitButton

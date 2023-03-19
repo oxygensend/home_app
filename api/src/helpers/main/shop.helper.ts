@@ -3,7 +3,7 @@ import { Shop } from '../../models/shop.model';
 
 @Service()
 export class ShopHelper {
-    public getAllWithSearch(searchText?: string){
+    public getAllWithSearch(searchText?: string) {
         const query = Shop.find({});
 
         if (searchText) {

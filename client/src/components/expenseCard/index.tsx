@@ -11,35 +11,16 @@ type ExpenseModalProps = {
     showEditModal: () => void;
 };
 
-export const ExpenseCard = ({
-    expense,
-    isOpen,
-    onClose,
-    showDeleteModal,
-    showEditModal,
-}: ExpenseModalProps) => {
+export const ExpenseCard = ({ expense, isOpen, onClose, showDeleteModal, showEditModal }: ExpenseModalProps) => {
     return (
-        <Modal
-            isOpen={isOpen}
-            onClose={() => onClose()}
-            title={'Expense'}
-            type={ModalEnum.COMMON}
-        >
+        <Modal isOpen={isOpen} onClose={() => onClose()} title={'Expense'} type={ModalEnum.COMMON}>
             <div className={'pb-6 pl-6 pr-6 flex flex-col gap-3'}>
                 <ExpenseProperty label={'Name'} value={expense?.name} />
                 <ExpenseProperty label={'Shop'} value={expense?.shop} />
-                <ExpenseProperty
-                    label={'Amount'}
-                    value={expense.amount + ' zł'}
-                />
-                <ExpenseProperty
-                    label={'Executor'}
-                    value={expense.executor.username}
-                />
+                <ExpenseProperty label={'Amount'} value={expense.amount + ' zł'} />
+                <ExpenseProperty label={'Executor'} value={expense.executor.username} />
                 <div className={'flex flex-row gap-2'}>
-                    <p className={'text-pink-500 text-xl font-semibold'}>
-                        Precipitants:
-                    </p>
+                    <p className={'text-pink-500 text-xl font-semibold'}>Precipitants:</p>
                     <div>
                         {expense.participants.map((user, i) => {
                             return (
@@ -52,14 +33,9 @@ export const ExpenseCard = ({
                 </div>
                 <ExpenseProperty
                     label={'Transaction date'}
-                    value={moment(expense.transactionDate).format(
-                        'DD MMMM YYYY'
-                    )}
+                    value={moment(expense.transactionDate).format('DD MMMM YYYY')}
                 />
-                <ExpenseProperty
-                    label={'Updated at'}
-                    value={moment(expense.updatedAt).format('DD MMMM YYYY')}
-                />
+                <ExpenseProperty label={'Updated at'} value={moment(expense.updatedAt).format('DD MMMM YYYY')} />
 
                 <div className={'flex flex-row gap-4 mt-3 '}>
                     <div

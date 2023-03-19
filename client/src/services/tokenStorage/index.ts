@@ -17,4 +17,4 @@ export const getRefreshToken = () => {
 export const removeTokens = () => {
     window.localStorage.removeItem('refreshToken');
     window.localStorage.removeItem('accessToken');
-}
+};

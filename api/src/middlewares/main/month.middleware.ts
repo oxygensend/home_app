@@ -9,9 +9,7 @@ export class MonthMiddleware implements MiddlewareInterface {
         const month = req.params.month;
 
         if (!month.match(/\d{4}-\d{2}/) || isNaN(Date.parse(month))) {
-            throw new HttpExceptions.NotFound(
-                'Invalid date provided. Provide allowed format YYYY-mm'
-            );
+            throw new HttpExceptions.NotFound('Invalid date provided. Provide allowed format YYYY-mm');
         }
 
         return next();

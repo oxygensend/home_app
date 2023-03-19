@@ -1,5 +1,5 @@
-import {Modal} from '../modal';
-import {ModalEnum} from '../../types';
+import { Modal } from '../modal';
+import { ModalEnum } from '../../types';
 
 type ConfirmationModalProps = {
     isOpen: boolean;
@@ -7,25 +7,11 @@ type ConfirmationModalProps = {
     onAgree: () => void;
     content: string;
 };
-export const ConfirmationModal = ({
-                                      isOpen,
-                                      onAgree,
-                                      onDecline,
-                                      content,
-                                  }: ConfirmationModalProps) => {
+export const ConfirmationModal = ({ isOpen, onAgree, onDecline, content }: ConfirmationModalProps) => {
     return (
-        <Modal
-            title={'Confirm'}
-            isOpen={isOpen}
-            onClose={onDecline}
-            type={ModalEnum.CONFIRMATION}
-            order={'50'}
-            zIndex={20}
-        >
+        <Modal title={'Confirm'} isOpen={isOpen} onClose={onDecline} type={ModalEnum.CONFIRMATION} order={'50'}>
             <div>
-                <p className={'text-center text-xl text-pink-50 pb-4'}>
-                    {content}
-                </p>
+                <p className={'text-center text-xl text-pink-50 pb-4'}>{content}</p>
                 <div className={'flex flex-row justify-between pl-6 pr-6 pb-6'}>
                     <div
                         className={

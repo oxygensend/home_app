@@ -5,14 +5,10 @@ import { HTTP_CODES } from '../../src/config/http.codes';
 import supertest from 'supertest';
 import { Container } from 'typedi';
 import { TokenStorage } from '../../src/crypto/storage/token.storage';
-import {
-    AuthPayloadInterface,
-    RefreshPayloadInterface,
-    TokenType,
-} from '../../src/crypto/crypto.types';
+import { AuthPayloadInterface, RefreshPayloadInterface, TokenType } from '../../src/crypto/crypto.types';
 import { DateTime } from 'luxon';
-import {Authenticator} from "../../src/crypto/auth/authenticator";
-import * as mongoose from "mongoose";
+import { Authenticator } from '../../src/crypto/auth/authenticator';
+import * as mongoose from 'mongoose';
 
 interface LoginParameters {
     _username?: string;
@@ -50,13 +46,8 @@ describe('user module', () => {
     });
 
     describe('POST /auth', () => {
-        const exec = ({
-            _username = username,
-            _password = password,
-        }: LoginParameters) => {
-            return request
-                .post('/auth')
-                .send({ username: _username, password: _password });
+        const exec = ({ _username = username, _password = password }: LoginParameters) => {
+            return request.post('/auth').send({ username: _username, password: _password });
         };
 
         it('should return 400 if user doesnt exist', async () => {
@@ -80,19 +71,13 @@ describe('user module', () => {
         it('return should contain auth token and refresh token', async () => {
             const res = await exec({});
 
-            expect(Object.keys(res.body)).toEqual([
-                'accessToken',
-                'refreshToken',
-            ]);
+            expect(Object.keys(res.body)).toEqual(['accessToken', 'refreshToken']);
         });
 
         it('should return return proper accessToken', async () => {
             const res = await exec({});
 
-            const token = tokenStorage.validateToken<AuthPayloadInterface>(
-                res.body.accessToken,
-                TokenType.auth
-            );
+            const token = tokenStorage.validateToken<AuthPayloadInterface>(res.body.accessToken, TokenType.auth);
 
             expect(token.username).toBe(user.username);
         });
@@ -100,10 +85,7 @@ describe('user module', () => {
         it('should return return proper refreshToken', async () => {
             const res = await exec({});
 
-            const token = tokenStorage.validateToken<RefreshPayloadInterface>(
-                res.body.refreshToken,
-                TokenType.refresh
-            );
+            const token = tokenStorage.validateToken<RefreshPayloadInterface>(res.body.refreshToken, TokenType.refresh);
 
             expect(token.sessionId).toEqual(user._id.toString());
         });
@@ -115,9 +97,7 @@ describe('user module', () => {
                 sessionId: new mongoose.Types.ObjectId().toString(),
                 type: TokenType.refresh,
             });
-            const res = await request
-                .post('/refresh_token')
-                .send({ token: token });
+            const res = await request.post('/refresh_token').send({ token: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
         });
@@ -128,9 +108,7 @@ describe('user module', () => {
                 type: TokenType.refresh,
                 exp: DateTime.now().minus({ second: 3600 }),
             });
-            const res = await request
-                .post('/refresh_token')
-                .send({ token: token });
+            const res = await request.post('/refresh_token').send({ token: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.UNAUTHORIZED);
         });
@@ -138,9 +116,7 @@ describe('user module', () => {
         it('should return new access and refresh token', async () => {
             //timezone issue
             const tokens = await Container.get(Authenticator).authentication(user._id);
-            const res = await request
-                .post('/refresh_token')
-                .send({ token: tokens.refreshToken});
+            const res = await request.post('/refresh_token').send({ token: tokens.refreshToken });
 
             console.log(res.body);
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);

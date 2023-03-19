@@ -1,4 +1,4 @@
-import {Method, IRoute} from "../route.types";
+import { Method, IRoute } from '../route.types';
 import 'reflect-metadata';
 
 /**
@@ -17,12 +17,12 @@ const methodRouteDecoratorFactory = (method: Method) => {
                 path: path,
                 method: method,
                 methodName: propertyKey,
-                middlewares: middlewares
+                middlewares: middlewares,
             });
             Reflect.defineMetadata('routes', routes, target.constructor);
         };
-    }
-}
+    };
+};
 
 export const Get = methodRouteDecoratorFactory('get');
 export const Post = methodRouteDecoratorFactory('post');

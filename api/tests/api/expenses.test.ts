@@ -12,10 +12,7 @@ describe('expense module', () => {
     let request: supertest.SuperTest<supertest.Test>;
     let server: Server;
 
-    const loginRequest = async (
-        username: string = 'test',
-        password: string = 'test123'
-    ) => {
+    const loginRequest = async (username: string = 'test', password: string = 'test123') => {
         const res = await request.post('/auth').send({
             username,
             password,
@@ -30,14 +27,10 @@ describe('expense module', () => {
         request = supertest(server.getApp());
 
         // load dummy data
-        let rawJson: Buffer = fs.readFileSync(
-            config.testDirectory + '/dummy/users.json'
-        );
+        let rawJson: Buffer = fs.readFileSync(config.testDirectory + '/dummy/users.json');
         let users: [] = JSON.parse(rawJson.toString());
         await User.collection.insertMany(users);
-        rawJson = fs.readFileSync(
-            config.testDirectory + '/dummy/expenses.json'
-        );
+        rawJson = fs.readFileSync(config.testDirectory + '/dummy/expenses.json');
         let expenses: [] = JSON.parse(rawJson.toString(), isoDateReviver);
         await Expense.collection.insertMany(expenses);
     });
@@ -56,56 +49,35 @@ describe('expense module', () => {
 
         it('should return 404 if provided month have valid format', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/expenses/excerpts/2022.08')
-                .set({ Authorization: token });
+            const res = await request.get('/expenses/excerpts/2022.08').set({ Authorization: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.NOT_FOUND);
         });
 
         it('should return serialized response', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/expenses/excerpts/2023-02')
-                .set({ Authorization: token });
+            const res = await request.get('/expenses/excerpts/2023-02').set({ Authorization: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
-            expect(Object.keys(res.body)).toEqual(
-                expect.arrayContaining(['expenses', 'balance', 'total'])
-            );
+            expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['expenses', 'balance', 'total']));
         });
 
         it('should return expenses monthly list', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/expenses/excerpts/2023-02')
-                .set({ Authorization: token });
+            const res = await request.get('/expenses/excerpts/2023-02').set({ Authorization: token });
 
             const expenses = await Expense.find({});
             expect(Object.keys(res.body.expenses[0])).toEqual(
-                expect.arrayContaining([
-                    '_id',
-                    'amount',
-                    'executor',
-                    'executor',
-                    'participants',
-                    'transactionDate',
-                ])
+                expect.arrayContaining(['_id', 'amount', 'executor', 'executor', 'participants', 'transactionDate']),
             );
         });
 
         it('should return monthly balance statistics', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/expenses/excerpts/2023-02')
-                .set({ Authorization: token });
+            const res = await request.get('/expenses/excerpts/2023-02').set({ Authorization: token });
 
             expect(Object.keys(res.body.balance[0])).toEqual(
-                expect.arrayContaining([
-                    'executor',
-                    'totalAmount',
-                    'expensesCount',
-                ])
+                expect.arrayContaining(['executor', 'totalAmount', 'expensesCount']),
             );
         });
 
@@ -132,18 +104,14 @@ describe('expense module', () => {
 
         it('should return 403 if user is not participant', async () => {
             const token = await loginRequest('test2', 'test123');
-            const res = await request
-                .get('/expenses/' + expense._id)
-                .set({ Authorization: token });
+            const res = await request.get('/expenses/' + expense._id).set({ Authorization: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.FORBIDDEN);
         });
 
         it('should return 200 and valid response', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/expenses/' + expense._id)
-                .set({ Authorization: token });
+            const res = await request.get('/expenses/' + expense._id).set({ Authorization: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
             expect(Object.keys(res.body)).toEqual(
@@ -156,7 +124,7 @@ describe('expense module', () => {
                     'participants',
                     'transactionDate',
                     'createdAt',
-                ])
+                ]),
             );
         });
     });
@@ -181,8 +149,7 @@ describe('expense module', () => {
                         email: 'test2@test.com',
                     },
                 ],
-                transactionDate:
-                    params?.transactionDate ?? DateTime.now().toISODate(),
+                transactionDate: params?.transactionDate ?? DateTime.now().toISODate(),
             };
 
             const req = request.post('/expenses').send(defaultBody);
@@ -201,7 +168,7 @@ describe('expense module', () => {
                 {
                     amount: 'test',
                 },
-                token
+                token,
             );
 
             expect(res.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
@@ -212,7 +179,7 @@ describe('expense module', () => {
                 {
                     executor: { user: 'test', password: 'test' },
                 },
-                token
+                token,
             );
 
             expect(res.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
@@ -223,7 +190,7 @@ describe('expense module', () => {
                 {
                     executor: { username: 'test0', email: 'test@test.com' },
                 },
-                token
+                token,
             );
 
             expect(res.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
@@ -234,7 +201,7 @@ describe('expense module', () => {
                 {
                     amount: [{ user: 'test0', password: 'test' }],
                 },
-                token
+                token,
             );
 
             expect(res.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
@@ -245,7 +212,7 @@ describe('expense module', () => {
                 {
                     amount: '23-08-2000',
                 },
-                token
+                token,
             );
 
             expect(res.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
@@ -316,18 +283,14 @@ describe('expense module', () => {
 
         it('should return 403 if user is not executor', async () => {
             const token = await loginRequest('test2', 'test123');
-            const res = await request
-                .delete('/expenses/' + expense._id)
-                .set({ Authorization: token });
+            const res = await request.delete('/expenses/' + expense._id).set({ Authorization: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.FORBIDDEN);
         });
 
         it('should return 204 and delete expense', async () => {
             const token = await loginRequest();
-            const res = await request
-                .delete('/expenses/' + expense._id)
-                .set({ Authorization: token });
+            const res = await request.delete('/expenses/' + expense._id).set({ Authorization: token });
 
             const findExpense = await Expense.findById(expense._id);
 

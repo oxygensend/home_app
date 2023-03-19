@@ -1,10 +1,5 @@
 import axios from 'axios';
-import {
-    getAccessToken,
-    getRefreshToken,
-    setAccessToken,
-    setRefreshToken,
-} from '../tokenStorage';
+import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from '../tokenStorage';
 
 const instance = axios.create({
     headers: {
@@ -22,7 +17,7 @@ instance.interceptors.request.use(
     },
     (error) => {
         return Promise.reject(error);
-    }
+    },
 );
 
 instance.interceptors.response.use(
@@ -48,13 +43,12 @@ instance.interceptors.response.use(
                                 Accept: 'application/json',
                                 'Content-Type': 'application/json',
                             },
-                        }
+                        },
                     );
                     const { token, refreshToken } = response.data;
                     setAccessToken(token);
                     setRefreshToken(refreshToken);
-                    instance.defaults.headers.common['Authorization'] =
-                        'Bearer ' + token;
+                    instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
                     return instance(originalConfig);
                 } catch (e: any) {
                     if (e.response && e.response.data) {
@@ -70,7 +64,7 @@ instance.interceptors.response.use(
             }
         }
         return Promise.reject(err);
-    }
+    },
 );
 
 export default instance;

@@ -1,8 +1,6 @@
 import { ExcerptExpense, Expense } from '../types';
 
-export const mapExpenseToExpenseExcerpt = (
-    expense: Expense
-): ExcerptExpense => {
+export const mapExpenseToExpenseExcerpt = (expense: Expense): ExcerptExpense => {
     return {
         _id: expense._id,
         shop: expense.shop,

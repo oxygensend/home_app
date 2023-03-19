@@ -15,9 +15,7 @@ export class AuthMiddleware implements MiddlewareInterface {
             return next(new Unauthorized('Access denied.'));
         }
 
-        req.user = this.authenticator.getLoggedUser(
-            token.replace('Bearer ', '')
-        );
+        req.user = this.authenticator.getLoggedUser(token.replace('Bearer ', ''));
 
         return next();
     }

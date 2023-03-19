@@ -1,11 +1,5 @@
 import { DtoInterface } from './dto.interface';
-import {
-    IsArray,
-    IsDateString,
-    IsNumber,
-    IsObject, IsOptional, IsString,
-    ValidateNested,
-} from 'class-validator';
+import { IsArray, IsDateString, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { ExistingUser, Required } from '../../decorators/validation';
 import { Type } from 'class-transformer';
 import { RelatedUserDto } from './related.user.dto';

@@ -1,31 +1,53 @@
-node:19.3.0-alpine
+FROM node:19.6-alpine AS node
 
-WORKDIR /usr
+# Stage builder
 
-COPY package.json .
-COPY tsconfig.json .
-COPY yarn.lock .
+FROM node AS builder
 
-COPY src ./src
+WORKDIR /app
+
+COPY package.json ./
+COPY yarn.lock ./
+COPY tsconfig.json ./
 
 
-RUN npm install -g yarn
 RUN yarn install
+
+COPY . .
+
+# Invoke the build script to transpile code to js
 RUN yarn run build
 
 EXPOSE 4005
 
-## this is stage two, where the app actually runs
-FROM node:19.3.0-alpine
+# Final stage
 
-WORKDIR /usr
+FROM node AS final
+
+ENV NODE_ENV production
+ENV PWD /node/dist
+
+RUN apk --no-cache -U upgrade
+
+RUN mkdir -p /node/dist
+# && chown -R node:node /usr
+
+WORKDIR /node
+
+
+RUN npm i  -g pm2
+
 
 COPY package.json .
-COPY tsconfig.json .
 COPY yarn.lock .
+COPY process.yaml .
+
+# USER node
 
 RUN yarn  install --only=production
-COPY --from=0 /usr/dist .
-RUN yarn add pm2 -g
-EXPOSE 80
-CMD ["pm2-runtime","app.js"]
+COPY --from=builder /app/dist ./dist
+COPY src/config/crypto/* ./dist/src/config/crypto/
+
+EXPOSE 4005
+
+ENTRYPOINT ["pm2-runtime", "./process.yaml"]
