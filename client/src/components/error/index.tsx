@@ -4,7 +4,7 @@ type ErrorProps = {
     error: ErrorType | string;
 };
 export const Error = ({ error }: ErrorProps) => {
-    if (error instanceof String) {
+    if (typeof(error)  === "string") {
         return <p className={'font-medium tracking-wide text-red-500 text-xs'}>{error}</p>;
     } else {
         return (
