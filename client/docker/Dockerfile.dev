@@ -3,13 +3,13 @@ WORKDIR /app
 
 COPY package.json ./
 COPY yarn.lock ./
-COPY tsconfig.json .
+COPY tsconfig.json ./
 
 RUN npm install -g typescript
 RUN npm install -g ts-node
+RUN yarn install
 
 COPY . .
-RUN yarn install
 
 EXPOSE 4001
 CMD ["yarn", "run", "start"]

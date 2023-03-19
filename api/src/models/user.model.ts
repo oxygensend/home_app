@@ -1,22 +1,21 @@
-import {model, Schema} from "mongoose";
+import { model, Schema } from 'mongoose';
 
 export interface UserInterface {
-    _id: string,
-    name: string,
-    surname: string,
-    username: string,
-    email: string,
-    password: string,
-    role: "user" | "admin",
+    _id: string;
+    name: string;
+    surname: string;
+    username: string;
+    email: string;
+    password: string;
+    role: 'user' | 'admin';
 
-    save(): void,
-
+    save(): void;
 }
 
 export interface RelatedUserInterface {
-    _id?: string,
-    username: string,
-    email: string
+    _id?: string;
+    username: string;
+    email: string;
 }
 
 const userSchema = new Schema<UserInterface>({
@@ -24,39 +23,37 @@ const userSchema = new Schema<UserInterface>({
         type: String,
         minlength: 3,
         maxlength: 50,
-        required: true
+        required: true,
     },
     surname: {
         type: String,
         minlength: 3,
         maxlength: 50,
-        required: true
+        required: true,
     },
     username: {
         type: String,
         minlength: 3,
         maxlength: 50,
         required: false,
-        unique: true
+        unique: true,
     },
     email: {
         type: String,
         minlength: 3,
         maxlength: 50,
         required: false,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
         minlength: 5,
-        required: true
+        required: true,
     },
     role: {
         type: String,
-        default: "user"
-    }
-
-})
-
+        default: 'user',
+    },
+});
 
 export const User = model<UserInterface>('User', userSchema);

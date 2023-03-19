@@ -10,10 +10,7 @@ describe('shops module', () => {
     let request: supertest.SuperTest<supertest.Test>;
     let server: Server;
 
-    const loginRequest = async (
-        username: string = 'test',
-        password: string = 'test123'
-    ) => {
+    const loginRequest = async (username: string = 'test', password: string = 'test123') => {
         const res = await request.post('/auth').send({
             username,
             password,
@@ -28,16 +25,13 @@ describe('shops module', () => {
         request = supertest(server.getApp());
 
         // load dummy data
-        let rawJson: Buffer = fs.readFileSync(
-            config.testDirectory + '/dummy/users.json'
-        );
+        let rawJson: Buffer = fs.readFileSync(config.testDirectory + '/dummy/users.json');
         let users: [] = JSON.parse(rawJson.toString());
         await User.collection.insertMany(users);
         rawJson = fs.readFileSync(config.testDirectory + '/dummy/shops.json');
         let shops: [] = JSON.parse(rawJson.toString());
-        console.log(shops)
+        console.log(shops);
         await Shop.collection.insertMany(shops);
-
     });
 
     afterAll(async () => {
@@ -54,9 +48,7 @@ describe('shops module', () => {
 
         it('should return list of all shops in  alphabetical order', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/shops')
-                .set({ Authorization: token });
+            const res = await request.get('/shops').set({ Authorization: token });
 
             const shops = res.body;
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
@@ -65,9 +57,7 @@ describe('shops module', () => {
 
         it('should have possibility to search through that list', async () => {
             const token = await loginRequest();
-            const res = await request
-                .get('/shops?search=biedronka')
-                .set({ Authorization: token });
+            const res = await request.get('/shops?search=biedronka').set({ Authorization: token });
 
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
             expect(res.body.length).toBe(1);

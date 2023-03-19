@@ -4,13 +4,13 @@ import expenses from '../../assets/images/sidebar/expenses.svg';
 import calendar from '../../assets/images/sidebar/calendar.svg';
 import singOut from '../../assets/images/sidebar/sing-out.svg';
 import { MenuItem } from './menuItem';
-import {removeTokens} from "../../services/tokenStorage";
+import { removeTokens } from '../../services/tokenStorage';
 
 type SidebarProps = {
-    isOpen: boolean,
-    width: number,
-    toggleSideBar: CallableFunction
-}
+    isOpen: boolean;
+    width: number;
+    toggleSideBar: CallableFunction;
+};
 
 export const Sidebar = ({ isOpen, width, toggleSideBar }: SidebarProps) => {
     return (
@@ -20,34 +20,15 @@ export const Sidebar = ({ isOpen, width, toggleSideBar }: SidebarProps) => {
             }`}
         >
             <div className={`w-64 h-full  bg-pink-600 rounded-r`}>
-                <div
-                    className={
-                        'shadow-xl rounded flex items-center justify-center'
-                    }
-                >
+                <div className={'shadow-xl rounded flex items-center justify-center'}>
                     <img src={money} alt={'money'} height={20} width={80} />
                 </div>
 
                 <div className={' flex flex-col items-center mt-2'}>
-                    <MenuItem
-                        name={'Dashboard'}
-                        imageSrc={dashboard}
-                        imageAlt={'dashboard'}
-                        redirect={'/dashboard'}
-                    />
+                    <MenuItem name={'Dashboard'} imageSrc={dashboard} imageAlt={'dashboard'} redirect={'/dashboard'} />
 
-                    <MenuItem
-                        name={'Expenses'}
-                        imageSrc={expenses}
-                        imageAlt={'expenses'}
-                        redirect={'/expenses'}
-                    />
-                    <MenuItem
-                        name={'Calendar'}
-                        imageSrc={calendar}
-                        imageAlt={'calendar'}
-                        redirect={'/calendar'}
-                    />
+                    <MenuItem name={'Expenses'} imageSrc={expenses} imageAlt={'expenses'} redirect={'/expenses'} />
+                    <MenuItem name={'Calendar'} imageSrc={calendar} imageAlt={'calendar'} redirect={'/calendar'} />
                     <MenuItem
                         name={'Sing out'}
                         imageSrc={singOut}

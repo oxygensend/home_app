@@ -16,9 +16,7 @@ export const Input = ({
 }: InputProps) => {
     return (
         <div className={`flex flex-col gap-1 ${width ? width : 'w-5/6'}`}>
-            <label className={'text-left text-pink-50 font-semibold'}>
-                {label}
-            </label>
+            <label className={'text-left text-pink-50 font-semibold'}>{label}</label>
             <input
                 {...register(name)}
                 name={name}

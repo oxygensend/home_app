@@ -4,10 +4,10 @@ import winston from 'winston';
 import { UserService } from '../services';
 import { Response } from 'express';
 import { DtoFactory } from '../factories';
-import {Controller, Get, Post} from "../decorators/routing";
-import {AuthMiddleware, ObjectIDMiddleware} from "../middlewares";
-import {LoginDto, RefreshTokenDto} from "../dto";
-import {User} from "../models/user.model";
+import { Controller, Get, Post } from '../decorators/routing';
+import { AuthMiddleware, ObjectIDMiddleware } from '../middlewares';
+import { LoginDto, RefreshTokenDto } from '../dto';
+import { User } from '../models/user.model';
 
 @Service()
 @Controller()
@@ -20,26 +20,20 @@ export default class UserController {
 
     @Post('/auth')
     public async auth(req: Request, res: Response) {
-        const dto = await DtoFactory.create<LoginDto>(
-            LoginDto,
-            req.body as Partial<LoginDto>
-        );
+        const dto = await DtoFactory.create<LoginDto>(LoginDto, req.body as Partial<LoginDto>);
         const response = await this.userService.login(dto);
         return res.json(response).status(200);
     }
 
     @Post('/refresh_token')
     public async refreshToken(req: Request, res: Response) {
-        const dto = await DtoFactory.create<RefreshTokenDto>(
-            RefreshTokenDto,
-            req.body as Partial<RefreshTokenDto>
-        );
+        const dto = await DtoFactory.create<RefreshTokenDto>(RefreshTokenDto, req.body as Partial<RefreshTokenDto>);
         const response = await this.userService.refreshToken(dto);
         return res.json(response).status(200);
     }
     @Get('/users/list', [AuthMiddleware])
     public async getUsersList(req: Request, res: Response) {
-        const users = await User.find({}).select({username: 1, email: 1, _id: 0});
+        const users = await User.find({}).select({ username: 1, email: 1, _id: 0 });
         return res.json(users).status(200);
     }
 
@@ -47,6 +41,4 @@ export default class UserController {
     public async getUser(req: Request, res: Response) {
         console.log(req);
     }
-
-
 }

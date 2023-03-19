@@ -1,11 +1,9 @@
-import {Layout} from "../../components/layout";
+import { Layout } from '../../components/layout';
 
 export const Dashboard = ({}) => {
-
     return (
         <Layout>
-            <div>
-            </div>
+            <div>I am not empty</div>
         </Layout>
-    )
+    );
 };

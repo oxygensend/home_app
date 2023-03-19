@@ -1,8 +1,4 @@
-import {
-    registerDecorator,
-    ValidationArguments,
-    ValidationOptions,
-} from 'class-validator';
+import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 
 export const Required = (validationOptions?: ValidationOptions) => {
     return (object: Object, propertyName: string) => {

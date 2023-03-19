@@ -1,5 +1,4 @@
 import { LoginForm } from '../../components/loginForm';
-import test from '../../assets/images/test.jpg';
 
 export function Login({}) {
     return (

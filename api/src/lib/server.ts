@@ -7,8 +7,8 @@ import 'express-async-errors';
 import * as os from 'os';
 import { parse } from 'express-form-data';
 import cors from 'cors';
-import {MiddlewareFactory} from "../factories";
-import {ErrorMiddleware} from "../middlewares";
+import { MiddlewareFactory } from '../factories';
+import { ErrorMiddleware } from '../middlewares';
 
 export class Server {
     private readonly app: Application;
@@ -51,7 +51,7 @@ export class Server {
             parse({
                 uploadDir: os.tmpdir(),
                 autoClean: true,
-            })
+            }),
         );
         this.routesSetUp();
 

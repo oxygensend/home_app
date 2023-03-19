@@ -1,26 +1,19 @@
-import winston, {transports} from "winston";
+import winston, { transports } from 'winston';
 
 export class Logger {
+    private static logger: winston.Logger;
 
-    private static logger: winston.Logger
-
-    private constructor() {
-    }
+    private constructor() {}
 
     public static getLogger(): winston.Logger {
         if (!this.logger) {
             const logger: winston.Logger = winston.createLogger({
-                transports: [
-                    new transports.File({filename: 'var/dev.log'})
-                ],
-                exceptionHandlers: [
-                    new transports.File({filename: 'var/exceptions.log'}),
-                    new transports.Console()
-                ],
+                transports: [new transports.File({ filename: 'var/dev.log' })],
+                exceptionHandlers: [new transports.File({ filename: 'var/exceptions.log' }), new transports.Console()],
                 format: winston.format.combine(
                     winston.format.json(),
                     winston.format.prettyPrint(),
-                    winston.format.colorize({all: true})
+                    winston.format.colorize({ all: true }),
                 ),
             });
 

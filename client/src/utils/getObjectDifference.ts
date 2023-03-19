@@ -26,7 +26,7 @@ const compareArrays = (oldArr: any[], newArr: any[]): any[] => {
         return newArr;
     }
 
-    const diff = newArr.reduce((result, el, i) => {
+    const diff = newArr.reduce((result, _, i) => {
         const subDiff = getObjectDifference(oldArr[i], newArr[i]);
         if (Object.keys(subDiff).length) {
             result[i] = subDiff;

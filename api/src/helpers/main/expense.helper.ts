@@ -1,14 +1,11 @@
 import { Expense } from '../../models/expense.model';
 import { Service } from 'typedi';
 import { HttpExceptions } from '../../exceptions';
-import {ExpenseFilterInterface, ExpenseSortEnum} from "../../filters";
+import { ExpenseFilterInterface, ExpenseSortEnum } from '../../filters';
 
 @Service()
 export class ExpenseHelper {
-    public getExpensesByMonth(
-        month: string,
-        filters: ExpenseFilterInterface
-    ): any {
+    public getExpensesByMonth(month: string, filters: ExpenseFilterInterface): any {
         const query = Expense.find({
             $expr: {
                 $eq: [
