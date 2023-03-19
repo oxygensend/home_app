@@ -1,6 +1,6 @@
 type ExpensePropertyProps = {
     label: string;
-    value: string|undefined;
+    value: string | undefined;
 };
 export const ExpenseProperty = ({ label, value }: ExpensePropertyProps) => {
     return (
