@@ -5,12 +5,7 @@ import winston from 'winston';
 import { Controller, Delete, Get, Patch, Post } from '../decorators/routing';
 import { ExpenseService } from '../services';
 import { HTTP_CODES } from '../config/http.codes';
-import {
-    AuthMiddleware,
-    ExpenseOwnerMiddleware,
-    MonthMiddleware,
-    ObjectIDMiddleware,
-} from '../middlewares';
+import { AuthMiddleware, ExpenseOwnerMiddleware, MonthMiddleware, ObjectIDMiddleware } from '../middlewares';
 
 @Service()
 @Controller('/expenses')
@@ -33,11 +28,7 @@ export default class ExpensesController {
         return res.status(HTTP_CODES.SUCCESS).json(response);
     }
 
-    @Delete('/:id', [
-        AuthMiddleware,
-        ObjectIDMiddleware,
-        ExpenseOwnerMiddleware,
-    ])
+    @Delete('/:id', [AuthMiddleware, ObjectIDMiddleware, ExpenseOwnerMiddleware])
     public async delete(req: Request, res: Response) {
         await this.expenseService.deleteExpense(req);
         return res.status(HTTP_CODES.NO_CONTENT).json({});
@@ -45,10 +36,7 @@ export default class ExpensesController {
 
     @Get('/excerpts/:month', [AuthMiddleware, MonthMiddleware])
     public async getExcerptsByMonth(req: Request, res: Response) {
-        const response = await this.expenseService.getByMonth(
-            req.params.month,
-            req.query
-        );
+        const response = await this.expenseService.getByMonth(req.params.month, req.query);
         return res.status(HTTP_CODES.SUCCESS).json(response);
     }
 

@@ -7,8 +7,8 @@
     "dev": "nodemon src/app.ts",
     "test": "cross-env NODE_ENV=test jest  --verbose --runInBand ",
     "test:watch": "yarn run test --watch  ",
-    "build": "tsc -p ."
-
+    "build": "tsc -p .",
+    "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts,jsx,tsx,config.js}\""
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

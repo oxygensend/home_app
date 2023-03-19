@@ -1,5 +1,5 @@
 import { UseFormRegister } from 'react-hook-form';
-import {ErrorType} from "../../types";
+import { ErrorType } from '../../types';
 
 export interface InputProps {
     name: string;
@@ -9,8 +9,8 @@ export interface InputProps {
     placeholder: string;
     register: UseFormRegister<any>;
     className?: string;
-    error?: string | null | ErrorType
+    error?: string | null | ErrorType;
     width?: string;
     defaultValue?: string;
-    step?:number
+    step?: number;
 }

@@ -1,6 +1,6 @@
 import { UseFormRegister } from 'react-hook-form';
 import { Error } from '../error';
-import {ErrorType} from "../../types";
+import { ErrorType } from '../../types';
 
 type SelectProps = {
     name: string;
@@ -12,8 +12,8 @@ type SelectProps = {
     register: UseFormRegister<any>;
     width?: string;
     defaultOptionText?: string;
-    error?: ErrorType
-    required?: boolean
+    error?: ErrorType;
+    required?: boolean;
 };
 
 export const Select = ({
@@ -27,18 +27,14 @@ export const Select = ({
     width,
     defaultOptionText,
     error,
-    required
+    required,
 }: SelectProps) => {
     if (defaultOptionText) {
         const defaultOption = { [value]: '', [display]: defaultOptionText };
         options = [defaultOption, ...options];
     }
     return (
-        <div
-            className={`flex flex-col font-semibold gap-1 ${
-                width ? width : 'w-5/6'
-            }`}
-        >
+        <div className={`flex flex-col font-semibold gap-1 ${width ? width : 'w-5/6'}`}>
             <label className={'text-left text-pink-50'}>{label}</label>
             <select
                 className={`py-2.5 px-0 bg-transparent border-0 border-b-2 appearance-none text-gray-400 border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}

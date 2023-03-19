@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { DateTime } from 'luxon';
 import { RelatedUserInterface } from './user.model';
 
- export interface ExpenseInterface extends Document{
+export interface ExpenseInterface extends Document {
     _id: string;
     amount: number;
     name?: string;

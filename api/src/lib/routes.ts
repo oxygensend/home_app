@@ -23,19 +23,8 @@ export class Routes {
         return Routes.instance;
     }
 
-    public setRoute(
-        method: Method,
-        path: string,
-        middlewares: any[],
-        binding: any
-    ) {
-        this.router[method](
-            path,
-            ...middlewares.map((middleware) =>
-                MiddlewareFactory.bind(middleware)
-            ),
-            binding
-        );
+    public setRoute(method: Method, path: string, middlewares: any[], binding: any) {
+        this.router[method](path, ...middlewares.map((middleware) => MiddlewareFactory.bind(middleware)), binding);
     }
 
     public getRouter(): Router {
@@ -46,26 +35,17 @@ export class Routes {
         fs.readdirSync(config.controllersDirectory)
             .filter((file) => /\.(controller\.js|controller\.ts)$/.test(file))
             .forEach((file) => {
-                const controllerClass = require(path.join(
-                    controllersDirectory,
-                    file
-                )).default;
+                const controllerClass = require(path.join(controllersDirectory, file)).default;
 
                 const instance: any = Container.get(controllerClass);
-                const routes: IRoute[] = Reflect.getMetadata(
-                    'routes',
-                    controllerClass
-                );
-                const prefix: string = Reflect.getMetadata(
-                    'prefix',
-                    controllerClass
-                );
+                const routes: IRoute[] = Reflect.getMetadata('routes', controllerClass);
+                const prefix: string = Reflect.getMetadata('prefix', controllerClass);
                 routes.forEach((route: IRoute) => {
                     this.setRoute(
                         route.method,
                         `${prefix}${route.path}`,
                         route.middlewares,
-                        instance[route.methodName].bind(instance)
+                        instance[route.methodName].bind(instance),
                     );
                 });
             });

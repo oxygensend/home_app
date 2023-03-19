@@ -1,7 +1,7 @@
-import fs from "fs";
-import {config} from "../../config/config";
-import {App} from "../../exceptions";
-import {Service} from "typedi";
+import fs from 'fs';
+import { config } from '../../config/config';
+import { App } from '../../exceptions';
+import { Service } from 'typedi';
 
 /**
  * Class responsible for reading crypto keys from files
@@ -9,7 +9,7 @@ import {Service} from "typedi";
 @Service()
 export class CryptoKeys {
     private _public: string;
-    private _private: string
+    private _private: string;
 
     constructor() {
         this._private = fs.readFileSync(config.cryptoPrivateKey).toString();
@@ -19,7 +19,6 @@ export class CryptoKeys {
             throw new App.NoCryptoKeyException('Missing keys');
         }
     }
-
 
     get public(): string {
         return this._public;

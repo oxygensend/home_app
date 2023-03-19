@@ -1,8 +1,4 @@
-import {
-    registerDecorator,
-    ValidationArguments,
-    ValidationOptions,
-} from 'class-validator';
+import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator';
 import { User } from '../../../models/user.model';
 
 export const ExistingUser = (validationOptions?: ValidationOptions) => {
@@ -14,7 +10,7 @@ export const ExistingUser = (validationOptions?: ValidationOptions) => {
             options: validationOptions,
             validator: {
                 async validate(value: any, args: ValidationArguments) {
-                    if(!value) return false;
+                    if (!value) return false;
                     const user = await User.findOne({
                         username: value.username,
                     });

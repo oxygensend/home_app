@@ -4,7 +4,7 @@ import { SubmitButton } from '../submitButton';
 import axios from 'axios';
 import { setAccessToken, setRefreshToken } from '../../services/tokenStorage';
 import { useState } from 'react';
-import loginMain from "../../assets/images/login_main.jpg";
+import loginMain from '../../assets/images/login_main.jpg';
 
 type FormValues = {
     username: string;
@@ -36,23 +36,18 @@ export const LoginForm = ({}) => {
     };
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className={'flex flex-col gap-2 items-center'}
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className={'flex flex-col gap-2 items-center'}>
             <div>
-                <img src={loginMain} alt={"test"} height={200} width={200}/>
+                <img src={loginMain} alt={'test'} height={200} width={200} />
             </div>
 
             <div>
-                <h2 className={'text-pink-500 font-bold text-3xl mb-3'}>
-                    Home expenses
-                </h2>
+                <h2 className={'text-pink-500 font-bold text-3xl mb-3'}>Home expenses</h2>
             </div>
 
             <Input
                 name={'username'}
-                label={"Username"}
+                label={'Username'}
                 type={'text'}
                 required={true}
                 register={register}

@@ -9,7 +9,7 @@ const shopSchema = new Schema<ShopInterface>({
     name: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
 });
 

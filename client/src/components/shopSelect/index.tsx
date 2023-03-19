@@ -6,21 +6,10 @@ type SelectProps = {
     value: string;
     display: string;
     register: UseFormRegister<any>;
-    width?: string;
     defaultOptionText?: string;
 };
 
-export const ShopSelect = ({
-    options,
-    label,
-    value,
-    display,
-    register,
-    width,
-    defaultOptionText,
-}: SelectProps) => {
-
-
+export const ShopSelect = ({ options, label, value, display, register, defaultOptionText }: SelectProps) => {
     if (defaultOptionText) {
         const defaultOption = { [value]: '', [display]: defaultOptionText };
         options = [defaultOption, ...options];

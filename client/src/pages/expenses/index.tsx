@@ -1,14 +1,9 @@
 import { Layout } from '../../components/layout';
 import { ReactComponent as ArrowRight } from '../../assets/images/arrow-right-solid.svg';
 import { ReactComponent as ArrowLeft } from '../../assets/images/arrow-left-solid.svg';
-import {useCallback, useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import authAxios from '../../services/authAxios';
-import {
-    BalanceType,
-    ExcerptExpense,
-    Expense,
-    ModalEnum,
-} from '../../types';
+import { BalanceType, ExcerptExpense, Expense, ModalEnum } from '../../types';
 import { ExpensesList } from '../../components/expensesList';
 import { BalanceTable } from '../../components/balanceTable';
 import moment from 'moment';
@@ -34,23 +29,16 @@ export const Expenses = ({}) => {
     const [balance, setBalance] = useState<BalanceType[]>();
     const [total, setTotal] = useState<number>(0);
     const [month, setMonth] = useState(moment());
-    const [isExpenseFormModalOpen, setIsExpenseFormModalOpen] =
-        useState<boolean>(false);
-    const [isExpenseShowModalOpen, setIsExpenseShowModalOpen] =
-        useState<boolean>(false);
-    const [isExpenseDeleteModalOpen, setIsExpenseDeleteModalOpen] =
-        useState<boolean>(false);
-    const [isExpenseEditModalOpen, setIsExpenseEditModalOpen] =
-        useState<boolean>(false);
+    const [isExpenseFormModalOpen, setIsExpenseFormModalOpen] = useState<boolean>(false);
+    const [isExpenseShowModalOpen, setIsExpenseShowModalOpen] = useState<boolean>(false);
+    const [isExpenseDeleteModalOpen, setIsExpenseDeleteModalOpen] = useState<boolean>(false);
+    const [isExpenseEditModalOpen, setIsExpenseEditModalOpen] = useState<boolean>(false);
 
     const { _id } = selectedExpense ?? {};
 
-
     useEffect(() => {
         authAxios
-            .get<ExpenseExcerptsResponse>(
-                '/api/expenses/excerpts/' + month.format('YYYY-MM')
-            )
+            .get<ExpenseExcerptsResponse>('/api/expenses/excerpts/' + month.format('YYYY-MM'))
             .then((res) => {
                 setExpenses(res.data.expenses);
                 setBalance(res.data.balance);
@@ -67,10 +55,7 @@ export const Expenses = ({}) => {
     };
 
     const addNewExpenseRequest = async (body: any) => {
-        const { data } = await authAxios.post<Expense>(
-            '/api/expenses',
-            body
-        );
+        const { data } = await authAxios.post<Expense>('/api/expenses', body);
 
         expenses.push(mapExpenseToExpenseExcerpt(data));
         setIsExpenseFormModalOpen(false);
@@ -83,19 +68,11 @@ export const Expenses = ({}) => {
         const changedData = getObjectDifference(selectedExpense, body);
 
         if (Object.keys(changedData).length) {
-            const {data} = await authAxios.patch<Expense>(
-                '/api/expenses/' + _id,
-                changedData
-            );
+            const { data } = await authAxios.patch<Expense>('/api/expenses/' + _id, changedData);
         }
 
-        const updated = replaceElementsInObject<Expense>(
-            selectedExpense,
-            changedData
-        );
-        const index = expenses.findIndex(
-            (expense) => expense._id === _id
-        );
+        const updated = replaceElementsInObject<Expense>(selectedExpense, changedData);
+        const index = expenses.findIndex((expense) => expense._id === _id);
         expenses.splice(index, 1, mapExpenseToExpenseExcerpt(updated));
         setSelectedExpense(updated);
         setIsExpenseEditModalOpen(false);
@@ -105,9 +82,7 @@ export const Expenses = ({}) => {
     const onExpenseClickHandler = async (_id: string) => {
         setIsExpenseShowModalOpen(true);
         try {
-            const { data } = await authAxios.get<Expense>(
-                '/api/expenses/' + _id
-            );
+            const { data } = await authAxios.get<Expense>('/api/expenses/' + _id);
             setSelectedExpense(data);
         } catch (err: any) {
             console.log(err);
@@ -119,9 +94,7 @@ export const Expenses = ({}) => {
             await authAxios.delete('/api/expenses/' + _id);
             setSelectedExpense(undefined);
             setIsExpenseDeleteModalOpen(false);
-            setExpenses(
-                removeFromStateArray(expenses, _id, '_id')
-            );
+            setExpenses(removeFromStateArray(expenses, _id, '_id'));
         } catch (err: any) {
             console.log(err);
         }
@@ -138,9 +111,7 @@ export const Expenses = ({}) => {
                         className={'cursor-pointer'}
                         onClick={() => addMonth(-1)}
                     />
-                    <p className={'text-pink-50 text-3xl'}>
-                        {month.format('MMMM YYYY')}
-                    </p>
+                    <p className={'text-pink-50 text-3xl'}>{month.format('MMMM YYYY')}</p>
                     <ArrowRight
                         fill={'white'}
                         width={20}
@@ -150,24 +121,11 @@ export const Expenses = ({}) => {
                     />
                 </div>
 
-                {expenses ? (
-                    <ExpensesList
-                        expenses={expenses}
-                        onExpenseClickHandler={onExpenseClickHandler}
-                    />
-                ) : null}
+                {expenses ? <ExpensesList expenses={expenses} onExpenseClickHandler={onExpenseClickHandler} /> : null}
                 <div className={'w-96 md:w-128 xl:w-140 mt-10'}>
-                    <p
-                        className={
-                            'text-pink-50 text-2xl md:text-3xl font-semibold  mb-2'
-                        }
-                    >
-                        Balance
-                    </p>
+                    <p className={'text-pink-50 text-2xl md:text-3xl font-semibold  mb-2'}>Balance</p>
 
-                    {balance ? (
-                        <BalanceTable balance={balance} total={total} />
-                    ) : null}
+                    {balance ? <BalanceTable balance={balance} total={total} /> : null}
                 </div>
                 <div
                     className={
@@ -195,10 +153,7 @@ export const Expenses = ({}) => {
                         type={ModalEnum.COMMON}
                         order={'50'}
                     >
-                        <ExpenseForm
-                            request={editExpenseRequest}
-                            expense={selectedExpense}
-                        />
+                        <ExpenseForm request={editExpenseRequest} expense={selectedExpense} />
                     </Modal>
                 )}
 
@@ -207,9 +162,7 @@ export const Expenses = ({}) => {
                         expense={selectedExpense}
                         isOpen={isExpenseShowModalOpen}
                         onClose={() => setIsExpenseShowModalOpen(false)}
-                        showDeleteModal={() =>
-                            setIsExpenseDeleteModalOpen(true)
-                        }
+                        showDeleteModal={() => setIsExpenseDeleteModalOpen(true)}
                         showEditModal={() => {
                             setIsExpenseEditModalOpen(true);
                         }}
