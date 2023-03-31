@@ -16,6 +16,7 @@ import { removeFromStateArray } from '../../utils/removeFromStateArray';
 import { getObjectDifference } from '../../utils/getObjectDifference';
 import { replaceElementsInObject } from '../../utils/replaceElementsInObject';
 import { mapExpenseToExpenseExcerpt } from '../../utils/mapExpenseToExpenseExcerpt';
+import { getPayload } from '../../services/tokenStorage';
 
 type ExpenseExcerptsResponse = {
     total: number;
@@ -35,10 +36,13 @@ export const Expenses = ({}) => {
     const [isExpenseEditModalOpen, setIsExpenseEditModalOpen] = useState<boolean>(false);
 
     const { _id } = selectedExpense ?? {};
+    const user = getPayload();
 
     useEffect(() => {
         authAxios
-            .get<ExpenseExcerptsResponse>('/api/expenses/excerpts/' + month.format('YYYY-MM'))
+            .get<ExpenseExcerptsResponse>(
+                '/api/expenses/excerpts/' + month.format('YYYY-MM') + '?participants=' + user.username,
+            )
             .then((res) => {
                 setExpenses(res.data.expenses);
                 setBalance(res.data.balance);
@@ -57,7 +61,17 @@ export const Expenses = ({}) => {
     const addNewExpenseRequest = async (body: any) => {
         const { data } = await authAxios.post<Expense>('/api/expenses', body);
 
-        expenses.push(mapExpenseToExpenseExcerpt(data));
+        const expense = mapExpenseToExpenseExcerpt(data);
+        expenses.push(expense);
+
+        // update balance
+        for (let b of balance) {
+            if (b.executor === expense.executor.username) {
+                b.expensesCount++;
+                b.totalAmount += expense.amount;
+            }
+        }
+
         setIsExpenseFormModalOpen(false);
         setFlashMessage('New expenses added successfully.');
     };
