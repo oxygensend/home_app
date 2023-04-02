@@ -30,7 +30,6 @@ describe('shops module', () => {
         await User.collection.insertMany(users);
         rawJson = fs.readFileSync(config.testDirectory + '/dummy/shops.json');
         let shops: [] = JSON.parse(rawJson.toString());
-        console.log(shops);
         await Shop.collection.insertMany(shops);
     });
 
