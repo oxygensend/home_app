@@ -2,8 +2,8 @@ import { DateTime } from 'luxon';
 
 export interface TokenPayloadInterface {
     type: TokenType;
-    exp?: DateTime;
-    iat?: DateTime;
+    exp?: number;
+    iat?: number;
 }
 
 export interface AuthPayloadInterface extends TokenPayloadInterface {

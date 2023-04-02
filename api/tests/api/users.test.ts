@@ -118,7 +118,6 @@ describe('user module', () => {
             const tokens = await Container.get(Authenticator).authentication(user._id);
             const res = await request.post('/refresh_token').send({ token: tokens.refreshToken });
 
-            console.log(res.body);
             expect(res.statusCode).toBe(HTTP_CODES.SUCCESS);
         });
     });

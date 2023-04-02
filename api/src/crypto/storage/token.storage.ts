@@ -17,9 +17,9 @@ export class TokenStorage {
         const now = DateTime.now();
         return jwt.sign(
             {
-                ...payload,
                 iat: now.toUnixInteger(),
                 exp: now.plus({ seconds: config.defaultTokenTTL }).toUnixInteger(),
+                ...payload,
             },
             this.cryptoKeys.private,
             { algorithm: 'RS256' },
