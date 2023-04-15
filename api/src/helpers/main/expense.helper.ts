@@ -32,8 +32,8 @@ export class ExpenseHelper {
         }
 
         if (filters.participants) {
-            const participantsIds = filters.participants.split(',');
-            query.where('participants.username').in(participantsIds);
+            const participantsUsernames = filters.participants.split(',');
+            query.where('participants.username').in(participantsUsernames);
         }
 
         if (filters.shop) {
@@ -87,6 +87,15 @@ export class ExpenseHelper {
             },
         });
 
+        if (filters.participants) {
+            const participantsUsernames = filters.participants.split(',');
+            matchStages.push({
+                $match: {
+                    'participants.username': { $in: participantsUsernames },
+                },
+            });
+        }
+
         if (filters.executor) {
             matchStages.push({
                 $match: {
@@ -132,6 +141,7 @@ export class ExpenseHelper {
 
         return query.exec();
     }
+
 
     public async findOneOrThrowException(id: string): Promise<any> {
         const expense = await Expense.findById(id);

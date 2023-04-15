@@ -7,6 +7,7 @@ import { AuthPayloadInterface, AuthResponseInterface, RefreshPayloadInterface, T
 import { App, HttpExceptions } from '../../exceptions';
 import { User } from '../../models/user.model';
 import { DateTime } from 'luxon';
+import {config} from "../../config/config";
 
 /**
  * CLass responsible for user authentication
@@ -26,14 +27,18 @@ export class Authenticator {
             throw new App.InvalidTokenException();
         }
 
+        const now = DateTime.now();
         const refreshToken = this.tokenStorage.generateToken<RefreshPayloadInterface>({
             sessionId: user._id,
             type: TokenType.refresh,
+            exp: now.plus({ seconds: config.sessionTTL }).toUnixInteger()
         });
 
         await this.sessionService.startSession(user._id);
 
+
         this.logger.info(`Access token generated for user ${user.username} at time: ${DateTime.now()}`);
+        // this.emitter.emit()
         //emit event for logging
         return {
             accessToken: this.tokenStorage.generateToken<AuthPayloadInterface>({

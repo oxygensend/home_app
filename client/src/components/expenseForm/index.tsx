@@ -72,7 +72,6 @@ export const ExpenseForm = ({ request, expense }: ExpenseFormProps) => {
                 amount: parseFloat(body.amount),
             });
         } catch (err: any) {
-            console.log(err);
             if (err.response.status === 400) {
                 setErrors(err.response.data.error.violations);
             } else {

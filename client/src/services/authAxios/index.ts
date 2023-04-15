@@ -32,7 +32,6 @@ instance.interceptors.response.use(
                 originalConfig._retry = true;
 
                 try {
-                    console.log(getRefreshToken());
                     const response = await axios.post(
                         '/api/refresh_token',
                         {
@@ -45,10 +44,10 @@ instance.interceptors.response.use(
                             },
                         },
                     );
-                    const { token, refreshToken } = response.data;
-                    setAccessToken(token);
+                    const { accessToken, refreshToken } = response.data;
+                    setAccessToken(accessToken);
                     setRefreshToken(refreshToken);
-                    instance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+                    instance.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
                     return instance(originalConfig);
                 } catch (e: any) {
                     if (e.response && e.response.data) {

@@ -46,7 +46,7 @@ export class UserService {
 
         const session = await this.sessionManager.getSession(sessionId);
 
-        if (!session || DateTime.fromJSDate(session.expiredAt) > DateTime.now()) {
+        if (!session) {
             throw new HttpExceptions.Unauthorized('Session expired');
         }
 

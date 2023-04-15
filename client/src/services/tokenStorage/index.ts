@@ -1,3 +1,6 @@
+import jwtDecode from 'jwt-decode';
+import { AccessTokenPayload } from '../../types';
+
 export const setAccessToken = (token: string) => {
     window.localStorage.setItem('accessToken', token);
 };
@@ -17,4 +20,8 @@ export const getRefreshToken = () => {
 export const removeTokens = () => {
     window.localStorage.removeItem('refreshToken');
     window.localStorage.removeItem('accessToken');
+};
+
+export const getPayload = (): AccessTokenPayload => {
+    return jwtDecode(getAccessToken());
 };
