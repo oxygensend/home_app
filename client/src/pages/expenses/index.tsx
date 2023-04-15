@@ -41,7 +41,7 @@ export const Expenses = ({}) => {
     useEffect(() => {
         authAxios
             .get<ExpenseExcerptsResponse>(
-                '/api/expenses/excerpts/' + month.format('YYYY-MM') + '?participants=' + user.username,
+                '/api/expenses/excerpts/' + month.format('YYYY-MM') + '?participants=' + user?.username,
             )
             .then((res) => {
                 setExpenses(res.data.expenses);
