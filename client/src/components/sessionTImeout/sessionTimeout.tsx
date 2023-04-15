@@ -14,7 +14,7 @@ export const SessionTimeout = () => {
         clearInterval(warningInactiveInterval.current);
 
         if (isAuthenticated) {
-            let timeStamp = moment();
+            const timeStamp = moment();
             sessionStorage.setItem('lastTimeStamp', timeStamp.toString());
         } else {
             clearInterval(warningInactiveInterval.current);
@@ -25,7 +25,7 @@ export const SessionTimeout = () => {
 
     const timeChecker = () => {
         startTimerInterval.current = setTimeout(() => {
-            let storedTimeStamp = sessionStorage.getItem('lastTimeStamp');
+            const storedTimeStamp = sessionStorage.getItem('lastTimeStamp');
             if (storedTimeStamp) {
                 warningInactive(storedTimeStamp);
             }
