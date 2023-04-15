@@ -16,11 +16,11 @@ export type ShopType = {
 export type AccessTokenPayload = {
     username: string;
     email: string;
-    name: string,
-    iat: number
-    exp: number,
-    type: 'auth'
-}
+    name: string;
+    iat: number;
+    exp: number;
+    type: 'auth';
+};
 
 export type ExcerptExpense = {
     _id: string;
