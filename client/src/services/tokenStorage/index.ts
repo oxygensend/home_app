@@ -22,6 +22,7 @@ export const removeTokens = () => {
     window.localStorage.removeItem('accessToken');
 };
 
-export const getPayload = (): AccessTokenPayload => {
-    return jwtDecode(getAccessToken());
+export const getPayload = (): AccessTokenPayload | null => {
+    const token = getAccessToken();
+    return token ? jwtDecode(token) : null;
 };
