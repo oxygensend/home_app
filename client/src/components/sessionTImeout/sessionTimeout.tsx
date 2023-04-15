@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import moment from 'moment/moment';
-import {getAccessToken, removeTokens} from '../../services/tokenStorage';
+import { getAccessToken, removeTokens } from '../../services/tokenStorage';
 
 export const SessionTimeout = () => {
     const [events, setEvents] = useState(['click', 'load', 'scroll']);
@@ -26,7 +26,9 @@ export const SessionTimeout = () => {
     const timeChecker = () => {
         startTimerInterval.current = setTimeout(() => {
             let storedTimeStamp = sessionStorage.getItem('lastTimeStamp');
-            warningInactive(storedTimeStamp);
+            if (storedTimeStamp) {
+                warningInactive(storedTimeStamp);
+            }
         }, 900000);
     };
 
