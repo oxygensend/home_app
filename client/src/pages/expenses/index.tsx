@@ -27,7 +27,7 @@ type ExpenseExcerptsResponse = {
 export const Expenses = ({}) => {
     const [expenses, setExpenses] = useState<ExcerptExpense[]>([]);
     const [selectedExpense, setSelectedExpense] = useState<Expense>();
-    const [balance, setBalance] = useState<BalanceType[]>();
+    const [balance, setBalance] = useState<BalanceType[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [month, setMonth] = useState(moment());
     const [isExpenseFormModalOpen, setIsExpenseFormModalOpen] = useState<boolean>(false);
@@ -65,7 +65,7 @@ export const Expenses = ({}) => {
         expenses.push(expense);
 
         // update balance
-        for (let b of balance) {
+        for (const b of balance) {
             if (b.executor === expense.executor.username) {
                 b.expensesCount++;
                 b.totalAmount += expense.amount;
